@@ -1,0 +1,194 @@
+-- ------------------------------------------------------------------
+-- QUAN TRỌNG:
+-- 1. BẠN PHẢI CHẠY LỆNH "CREATE TABLE" TRƯỚC KHI CHẠY FILE NÀY.
+--    (Cách dễ nhất: Chạy app FastAPI để SQLAlchemy tự tạo bảng).
+-- 2. Chạy toàn bộ file này (F5 hoặc nút "Execute Script" trong DBeaver).
+-- ------------------------------------------------------------------
+-- ĐÃ SỬA: Đổi tên bảng thành IN HOA và có dấu ngoặc kép ("...")
+-- ------------------------------------------------------------------
+
+-- 1. ROLES (Không phụ thuộc)
+INSERT INTO "ROLES" (role_id, role_name, description, created_at, updated_at) VALUES
+(1, 'manager', 'System Manager - quản trị toàn hệ thống', '2025-01-01 09:00:00', NULL),
+(2, 'tc', 'Training Coordinator - điều phối đào tạo', '2025-01-01 09:00:00', NULL),
+(3, 'cs', 'Customer Support - chăm sóc học viên', '2025-01-01 09:00:00', NULL),
+(4, 'lec', 'Lecturer - giảng viên', '2025-01-01 09:00:00', NULL),
+(5, 'student', 'Student - học viên', '2025-01-01 09:00:00', NULL);
+
+-- 2. USERS (Phụ thuộc vào 'roles')
+INSERT INTO "USERS" (user_id, name, email, password_hash, role_id, status, created_at) VALUES
+(1, 'System Manager', 'manager@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 1, 'active', '2025-01-10 10:00:00'),
+(2, 'Dr. Nguyen Van A', 'gv.vana@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 4, 'active', '2025-01-11 11:00:00'),
+(3, 'Prof. Tran Thi B', 'gv.thib@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 4, 'active', '2025-01-11 12:00:00'),
+(4, 'Mr. Le Van C', 'gv.vanc@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 4, 'active', '2025-01-11 13:00:00'),
+(5, 'Mrs. Pham Thi D', 'gv.thid@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 4, 'active', '2025-01-11 14:00:00'),
+(6, 'Student Nguyen Van E', 'sv.vane@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 09:00:00'),
+(7, 'Student Tran Thi F', 'sv.thif@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 09:10:00'),
+(8, 'Student Le Van G', 'sv.vang@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 09:20:00'),
+(9, 'Student Pham Thi H', 'sv.thih@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 09:30:00'),
+(10, 'Student Vu Van I', 'sv.vani@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 09:40:00'),
+(11, 'Student Dang Thi K', 'sv.thik@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 09:50:00'),
+(12, 'Student Hoang Van L', 'sv.vanl@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'deactivated', '2025-02-01 10:00:00'),
+(13, 'Student Ngo Thi M', 'sv.thim@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 10:10:00'),
+(14, 'Student Do Van N', 'sv.vann@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 10:20:00'),
+(15, 'Student Bui Thi P', 'sv.thip@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 5, 'active', '2025-02-01 10:30:00'),
+(16, 'Training Coordinator', 'tc.user@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 2, 'active', '2025-01-10 10:10:00'),
+(17, 'Customer Support', 'cs.user@lms.edu', '$2b$12$E/gA.6.nKj.S9q4S2.Xlq.K.1c.1Y3JgG.Nl/8c.8l.X/m/1q2e.', 3, 'active', '2025-01-10 10:20:00');
+
+-- 3. LECTURERS (Phụ thuộc vào 'users')
+INSERT INTO "LECTURERS" (lecturer_id, user_id, department) VALUES
+(1, 2, 'Công nghệ thông tin'),
+(2, 3, 'Quản trị kinh doanh'),
+(3, 4, 'Công nghệ thông tin'),
+(4, 5, 'Ngôn ngữ Anh');
+
+-- 4. STUDENTS (Phụ thuộc vào 'users')
+INSERT INTO "STUDENTS" (student_id, user_id, enrollment_date, status) VALUES
+(1, 6, '2025-02-01', 'active'),
+(2, 7, '2025-02-01', 'active'),
+(3, 8, '2025-02-01', 'active'),
+(4, 9, '2025-02-01', 'active'),
+(5, 10, '2025-02-01', 'active'),
+(6, 11, '2025-02-01', 'active'),
+(7, 12, '2025-02-01', 'inactive'),
+(8, 13, '2025-02-01', 'active'),
+(9, 14, '2025-02-01', 'active'),
+(10, 15, '2025-02-01', 'active');
+
+-- 5. CLASSES (Phụ thuộc vào 'lecturers', 'users')
+INSERT INTO "CLASSES" (class_id, class_name, lecturer_id, schedule, created_by, status, created_at, place) VALUES
+(1, 'Lập trình Python Nâng cao', 1, '2025-09-05 08:00:00', 1, 'active', '2025-08-01 10:00:00', 'Phòng A101'),
+(2, 'Marketing Kỹ thuật số', 2, '2025-09-05 13:00:00', 1, 'active', '2025-08-01 11:00:00', 'Phòng B202'),
+(3, 'Cơ sở dữ liệu Phân tán', 3, '2025-09-06 08:00:00', 1, 'active', '2025-08-01 12:00:00', 'Phòng A102'),
+(4, 'Kỹ năng Viết Tiếng Anh Học thuật', 4, '2025-09-06 13:00:00', 1, 'pending', '2025-08-01 13:00:00', 'Phòng C303'),
+(5, 'Trí tuệ Nhân tạo Ứng dụng', 1, '2025-09-07 08:00:00', 1, 'archived', '2025-08-01 14:00:00', 'Phòng A101');
+
+-- 6. CLASS_ASSIGNMENTS (Phụ thuộc vào 'classes', 'students')
+INSERT INTO "CLASS_ASSIGNMENTS" (assignment_id, class_id, student_id) VALUES
+(1, 1, 1),
+(2, 1, 3),
+(3, 1, 5),
+(4, 1, 7),
+(5, 1, 9),
+(6, 2, 2),
+(7, 2, 4),
+(8, 2, 6),
+(9, 2, 8),
+(10, 2, 10),
+(11, 3, 1),
+(12, 3, 2),
+(13, 3, 3),
+(14, 3, 4),
+(15, 3, 5);
+
+-- 7. ATTENDANCE (Phụ thuộc vào 'class_assignments')
+INSERT INTO "ATTENDANCE" (attendance_id, assignment_id, date, status) VALUES
+(1, 1, '2025-09-05', 'present'),
+(2, 2, '2025-09-05', 'present'),
+(3, 3, '2025-09-05', 'present'),
+(4, 4, '2025-09-05', 'absent'),
+(5, 5, '2025-09-05', 'present'),
+(6, 1, '2025-09-12', 'present'),
+(7, 2, '2025-09-12', 'late'),
+(8, 3, '2025-09-12', 'present'),
+(9, 4, '2025-09-12', 'present'),
+(10, 5, '2025-09-12', 'present'),
+(11, 6, '2025-09-05', 'present'),
+(12, 7, '2025-09-05', 'present'),
+(13, 8, '2025-09-05', 'present'),
+(14, 9, '2025-09-05', 'present'),
+(15, 10, '2025-09-05', 'present');
+
+-- 8. FILES (Phụ thuộc vào 'users')
+INSERT INTO "FILES" (file_id, original_filename, saved_filename, file_size, content_type, created_at, uploader_user_id) VALUES
+(1, 'BaiGiang_Chuong1_Python.pdf', 'dc211c43-afef-11f0-b613-b42e99813b1b.pdf', 1024500, 'application/pdf', '2025-09-05 07:00:00', 2),
+(2, 'DeBai_CuoiKy_Python.pdf', 'dc2124dc-afef-11f0-b613-b42e99813b1b.pdf', 204800, 'application/pdf', '2025-10-10 08:00:00', 2),
+(3, 'Marketing_Slides_Week1.pptx', 'dc212581-afef-11f0-b613-b42e99813b1b.pptx', 5120000, 'application/vnd.openxmlformats-officedocument.presentationml.presentation', '2025-09-05 12:00:00', 3),
+(4, 'Assignment_Marketing.docx', 'dc2125d6-afef-11f0-b613-b42e99813b1b.docx', 15360, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '2025-10-11 09:00:00', 3),
+(5, 'DeCuong_DB_PhanTan.pdf', 'dc21262b-afef-11f0-b613-b42e99813b1b.pdf', 450000, 'application/pdf', '2025-09-06 07:00:00', 1),
+(6, 'SV_E_BaiTap1.zip', 'dc212671-afef-11f0-b613-b42e99813b1b.zip', 2048, 'application/zip', '2025-10-15 10:00:00', 6),
+(7, 'SV_G_BaiTap1.pdf', 'dc2126b8-afef-11f0-b613-b42e99813b1b.pdf', 307200, 'application/pdf', '2025-10-15 11:00:00', 8),
+(8, 'SV_I_BaiTap1.py', 'dc2126f9-afef-11f0-b613-b42e99813b1b.py', 5120, 'text/x-python', '2025-10-15 12:00:00', 10),
+(9, 'SV_F_Marketing_Plan.pdf', 'dc212740-afef-11f0-b613-b42e99813b1b.pdf', 1200000, 'application/pdf', '2025-10-16 14:00:00', 7),
+(10, 'SV_H_Marketing_Analysis.docx', 'dc212781-afef-11f0-b613-b42e99813b1b.docx', 25600, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '2025-10-16 15:00:00', 9),
+(11, 'SV_E_BaiTap1_GRADED.pdf', 'dc2127c3-afef-11f0-b613-b42e99813b1b.pdf', 2050, 'application/pdf', '2025-10-20 09:00:00', 2),
+(12, 'SV_G_BaiTap1_GRADED.pdf', 'dc212805-afef-11f0-b613-b42e99813b1b.pdf', 307300, 'application/pdf', '2025-10-20 10:00:00', 2),
+(13, 'SV_F_Marketing_Plan_FEEDBACK.pdf', 'dc21284c-afef-11f0-b613-b42e99813b1b.pdf', 1200100, 'application/pdf', '2025-10-21 11:00:00', 3),
+(14, 'SV_E_BaiTap2_Python.zip', 'dc21288d-afef-11f0-b613-b42e99813b1b.zip', 3000, 'application/zip', '2025-10-22 10:00:00', 6),
+(15, 'SV_G_BaiTap2_Python.zip', 'dc2128ce-afef-11f0-b613-b42e99813b1b.zip', 4000, 'application/zip', '2025-10-22 11:00:00', 8);
+
+-- 9. TASKS (Phụ thuộc vào 'classes', 'files')
+INSERT INTO "TASKS" (task_id, title, description, task_type, due_date, class_id, attached_file_id) VALUES
+(1, 'Bài giảng Chương 1: Giới thiệu Python', 'Slide bài giảng chương 1.', 'material', NULL, 1, 1),
+(2, 'Bài tập 1: Cấu trúc dữ liệu', 'Nộp file zip code bài tập 1.', 'assignment', '2025-10-15 23:59:00', 1, NULL),
+(3, 'Bài tập 2: Lập trình Hướng đối tượng', 'Nộp file zip code bài tập 2.', 'assignment', '2025-10-25 23:59:00', 1, 2),
+(4, 'Bài giảng Tuần 1: Tổng quan Marketing', 'Slide bài giảng tuần 1.', 'material', NULL, 2, 3),
+(5, 'Bài tập nhóm: Phân tích thị trường', 'Nộp file PDF Kế hoạch Marketing.', 'assignment', '2025-10-20 23:59:00', 2, 4),
+(6, 'Tài liệu: Đề cương môn học', 'Đề cương chi tiết CS CSDL Phân tán.', 'material', NULL, 3, 5),
+(7, 'Bài tập 1: Sharding & Replication', 'Trình bày 2 khái niệm.', 'assignment', '2025-10-10 23:59:00', 3, NULL),
+(8, 'Bài tập 2: NoSQL Databases', 'So sánh MongoDB và Cassandra.', 'assignment', '2025-10-20 23:59:00', 3, NULL),
+(9, 'Tài liệu: Academic Writing Guide', 'Hướng dẫn viết.', 'material', NULL, 4, NULL),
+(10, 'Tài liệu: AI Ứng dụng', 'Slide bài giảng (lớp đã lưu trữ).', 'material', NULL, 5, NULL);
+
+-- 10. SUBMISSIONS (Phụ thuộc vào 'tasks', 'students', 'files')
+INSERT INTO "SUBMISSIONS" (submission_id, submission_date, grade, feedback_text, task_id, student_id, submitted_file_id, graded_file_id) VALUES
+(1, '2025-10-15 10:00:00', 8.5, 'Làm tốt, cần chú ý clean code.', 2, 1, 6, 11),
+(2, '2025-10-15 11:00:00', 9, 'Code chạy tốt, tối ưu.', 2, 3, 7, 12),
+(3, '2025-10-15 12:00:00', 7, 'Thuật toán chưa tối ưu.', 2, 5, 8, NULL),
+(4, '2025-10-16 14:00:00', 9.5, 'Phân tích sâu, trình bày đẹp.', 5, 2, 9, 13),
+(5, '2025-10-16 15:00:00', NULL, NULL, 5, 4, 10, NULL),
+(6, '2025-10-22 10:00:00', NULL, NULL, 3, 1, 14, NULL),
+(7, '2025-10-22 11:00:00', NULL, NULL, 3, 3, 15, NULL),
+(8, '2025-10-09 10:00:00', 8, 'Hiểu bài.', 7, 1, 6, NULL),
+(9, '2025-10-09 11:00:00', 7.5, 'Cần chi tiết hơn.', 7, 2, 7, NULL),
+(10, '2025-10-19 12:00:00', 10, 'So sánh rất chi tiết.', 8, 3, 8, NULL),
+(11, '2025-10-19 14:00:00', NULL, NULL, 8, 4, 9, NULL),
+(12, '2025-10-19 15:00:00', NULL, NULL, 8, 5, 10, NULL);
+
+-- 11. GRADES (Phụ thuộc vào 'class_assignments')
+INSERT INTO "GRADES" (grade_id, assignment_id, grade, grade_type, remarks) VALUES
+(1, 1, 8.5, 'process', 'Điểm quá trình Bài tập 1 Python'),
+(2, 3, 9, 'process', 'Điểm quá trình Bài tập 1 Python'),
+(3, 5, 7, 'process', 'Điểm quá trình Bài tập 1 Python'),
+(4, 6, 9.5, 'project', 'Điểm dự án Marketing'),
+(5, 11, 8, 'process', 'Điểm BT 1 CSDL'),
+(6, 12, 7.5, 'process', 'Điểm BT 1 CSDL'),
+(7, 13, 10, 'process', 'Điểm BT 2 CSDL'),
+(8, 1, 9, 'project', 'Điểm cuối kỳ Python (từ submission 6)'),
+(9, 3, 8.5, 'project', 'Điểm cuối kỳ Python (từ submission 7)');
+
+-- 12. LECTURERS_ATTENDANCE (Phụ thuộc vào 'lecturers', 'classes')
+INSERT INTO "LECTURERS_ATTENDANCE" (lecturer_attendance_id, lecturer_id, class_id, attendance_date, status, notes) VALUES
+(1, 1, 1, '2025-09-05', 'present', 'Dạy buổi 1'),
+(2, 1, 1, '2025-09-12', 'present', 'Dạy buổi 2'),
+(3, 2, 2, '2025-09-05', 'present', 'Dạy buổi 1'),
+(4, 2, 2, '2025-09-12', 'late', 'Trễ 10 phút'),
+(5, 3, 3, '2025-09-06', 'present', 'Dạy buổi 1');
+
+-- 13. NOTIFICATIONS (Phụ thuộc vào 'users')
+INSERT INTO "NOTIFICATIONS" (notification_id, user_id, title, message, is_read, created_at) VALUES
+(1, 6, 'Bài tập 1 đã được chấm', 'GV đã chấm Bài tập 1: Cấu trúc dữ liệu của bạn. Điểm: 8.5', 0, '2025-10-20 09:00:00'),
+(2, 8, 'Bài tập 1 đã được chấm', 'GV đã chấm Bài tập 1: Cấu trúc dữ liệu của bạn. Điểm: 9.0', 1, '2025-10-20 10:00:00'),
+(3, 10, 'Bài tập 1 đã được chấm', 'GV đã chấm Bài tập 1: Cấu trúc dữ liệu của bạn. Điểm: 7.0', 0, '2025-10-20 10:30:00'),
+(4, 7, 'Bài tập nhóm đã được chấm', 'GV đã chấm Bài tập nhóm: Phân tích thị trường. Điểm: 9.5', 0, '2025-10-21 11:00:00'),
+(5, 2, 'Sinh viên 1 đã nộp bài', 'Sinh viên Nguyen Van E đã nộp Bài tập 2.', 1, '2025-10-22 10:00:00'),
+(6, 2, 'Sinh viên 3 đã nộp bài', 'Sinh viên Le Van G đã nộp Bài tập 2.', 0, '2025-10-22 11:00:00'),
+(7, 1, 'Lớp học mới đã được tạo', 'Lớp Lập trình Python Nâng cao đã được tạo.', 1, '2025-08-01 10:00:00'),
+(8, 6, 'Thông báo từ GV', 'Các em chú ý deadline Bài tập 2.', 0, '2025-10-21 15:00:00'),
+(9, 7, 'Thông báo từ GV', 'Các em chú ý deadline Bài tập 2.', 0, '2025-10-21 15:00:00'),
+(10, 8, 'Thông báo từ GV', 'Các em chú ý deadline Bài tập 2.', 0, '2025-10-21 15:00:00');
+
+-- 14. REPORTS (Phụ thuộc vào 'users')
+INSERT INTO "REPORTS" (report_id, generated_by, report_type, file_url, created_at) VALUES
+(1, 1, 'User Activity', '/reports/user_activity_20251001.pdf', '2025-10-01 05:00:00'),
+(2, 2, 'Class Gradebook (Class 1)', '/reports/class_1_grades_20251020.csv', '2025-10-20 18:00:00'),
+(3, 1, 'System Health', '/reports/system_health_20251022.pdf', '2025-10-22 06:00:00');
+
+-- 15. TICKETS (Phụ thuộc vào 'users')
+INSERT INTO "TICKETS" (ticket_id, submitted_by, assigned_to, issue_type, title, description, status, created_at, resolved_at) VALUES
+(1, 6, 1, 'Kỹ thuật', 'Không thể upload file', 'Em không thể upload file bài nộp cho Task 2.', 'in_progress', '2025-10-14 08:00:00', NULL),
+(2, 3, 17, 'Học vụ', 'Sai lịch thi', 'Lịch thi môn Marketing bị trùng.', 'open', '2025-10-15 09:00:00', NULL),
+(3, 9, 17, 'Tài khoản', 'Quên mật khẩu', 'Em quên mật khẩu, email sv.thih@lms.edu', 'resolved', '2025-10-16 10:00:00', '2025-10-16 11:00:00'),
+(4, 2, 1, 'Tính năng', 'Đề xuất tính năng chat', 'Hệ thống nên có tính năng chat real-time.', 'open', '2025-10-17 11:00:00', NULL),
+(5, 7, 17, 'Kỹ thuật', 'Không thấy điểm', 'Em đã nộp bài 1 nhưng không thấy điểm.', 'resolved', '2025-10-22 14:00:00', '2025-10-22 15:00:00');
+

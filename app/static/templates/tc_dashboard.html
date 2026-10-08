@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TC Dashboard - LMS</title>
+    <link rel="stylesheet"
+      href="{{ url_for('static', path='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    /* ======================================================= */
+    /* CSS TÙY CHỈNH CHUNG CHO FORM CONTROLS & LAYOUT */
+    /* ======================================================= */
+
+    /* Định hình chung cho các form control (input, select, textarea) */
+    .form-control, 
+    .form-box select, 
+    .form-box input:not([type="date"]):not([type="number"]):not([type="time"]), 
+    .form-box textarea,
+    #class-search-input {
+        /* Định hình container */
+        padding: 8px 12px;
+        height: 40px; 
+        border: 1px solid #d1d5db; /* gray-300 */
+        border-radius: 6px; 
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm nhẹ */
+        width: 100%; 
+        box-sizing: border-box; 
+        
+        /* Typography */
+        background-color: #ffffff;
+        color: #1f2937; /* gray-800 */
+        font-size: 14px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    /* Định hình cho textarea */
+    .form-box textarea.form-control {
+        height: auto;
+        min-height: 100px; 
+    }
+
+    /* Hiệu ứng Focus */
+    .form-control:focus, 
+    .form-box select:focus, 
+    .form-box input:focus,
+    .form-box textarea:focus {
+        border-color: #4A6CF7; /* Blue chủ đạo */
+        box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.3);
+        outline: none;
+    }
+
+    /* TẠO STYLE CHUNG CHO TẤT CẢ SELECT (FIX MODAL LỚP HỌC) */
+    /* Target tất cả các thẻ select có class .form-control */
+    select.form-control, 
+    .form-box select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M7 10l5 5 5-5H7z' fill='%236B7280'/%3E%3Csvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 14px;
+        padding-right: 30px; 
+        cursor: pointer;
+    }
+    
+    /* Cấu trúc grid cho form */
+    .form-grid {
+        display: grid;
+        gap: 20px;
+    }
+    
+    /* Sửa lỗi layout cho Page Header trong Quản lý Lớp học */
+    #class-management .page-header {
+        display: flex;
+        flex-wrap: wrap; 
+        align-items: center;
+        gap: 15px; 
+    }
+    
+    #class-management .page-header > div:first-child {
+         display: flex;
+         gap: 10px; 
+         flex-shrink: 0;
+    }
+    
+    #class-search-input {
+        flex-grow: 1; /* Cho phép thanh tìm kiếm chiếm hết không gian còn lại */
+        min-width: 200px; /* Đảm bảo kích thước tối thiểu */
+    }
+    
+    /* Tab buttons */
+    .class-management-tab {
+        padding: 10px 18px;
+        border-radius: 8px; 
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        white-space: nowrap; /* Ngăn nút bị xuống dòng */
+    }
+    
+    .class-management-tab[data-tab].btn-primary.active {
+        background-color: #4a6cf7; 
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 4px 8px rgba(74, 108, 247, 0.3); 
+    }
+    
+    .teacher-management-tab {
+         padding: 10px 18px;
+         border-radius: 8px; 
+         font-weight: 500;
+         transition: all 0.2s ease-in-out;
+         cursor: pointer;
+         border: none;
+         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+         white-space: nowrap;
+    }
+    
+    /* Đảm bảo form-grid trong modal tạo lớp học có 2 cột */
+    #class-modal-overlay .form-grid {
+         grid-template-columns: 1fr 1fr;
+    }
+    
+    /* ======================================================= */
+    /* CSS TÙY CHỈNH CHO PHẦN THÔNG BÁO */
+    /* ======================================================= */
+    
+    /* Layout cho thanh tìm kiếm và sắp xếp */
+    #announcements .form-grid {
+        /* Giữ nguyên grid layout 3fr 1fr */
+        grid-template-columns: 3fr 1fr; 
+        gap: 20px;
+        margin-top: 15px;
+        align-items: flex-end; 
+    }
+    
+    #announcements .form-group label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.9em; 
+        color: #4b5563; 
+    }
+
+    /* ======================================================= */
+    /* CSS BỔ SUNG CHO MODAL THÊM HỌC VIÊN (Add Student Modal) */
+    /* ======================================================= */
+
+    /* 1. Cấu trúc Modal chung và Header/Footer */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 600px; /* Độ rộng như trong ảnh mẫu */
+        overflow: hidden;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #9ca3af;
+        transition: color 0.2s;
+    }
+
+    .close-modal:hover {
+        color: #dc2626;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 15px 20px;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    /* 2. Style cụ thể cho nội dung Modal Thêm Học Viên */
+
+    /* Input tìm kiếm (sử dụng lại .form-control) */
+    #available-student-search {
+        /* Đã kế thừa từ .form-control */
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    /* Container cho bảng (có scroll) */
+    .table-container {
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+    }
+
+    /* Bảng dữ liệu */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Header bảng: Tên học viên/Email/Chọn */
+    .data-table thead th {
+        background-color: #f9fafb !important; /* Đảm bảo màu nền được áp dụng */
+        color: #6b7280; /* gray-500 */
+        font-weight: 600;
+        text-align: left;
+        padding: 10px;
+        /* Sticky header khi scroll */
+        position: sticky; 
+        /* top: 0; */
+        /* Rất quan trọng: Đảm bảo header nằm trên nội dung cuộn */
+        z-index: 10 !important; /* Đảm bảo độ ưu tiên cao nhất */
+        font-size: 0.9em;
+    }
+
+    .data-table tbody td {
+        padding: 10px;
+        border-bottom: 1px solid #f3f4f6; /* gray-100 */
+        color: #374151;
+        font-size: 0.9rem;
+    }
+
+    /* Căn giữa cột Chọn */
+    .data-table tbody td:last-child {
+        text-align: center;
+    }
+
+    /* Căn giữa Checkbox */
+    .add-student-checkbox {
+        transform: scale(1.1); /* Hơi to hơn một chút */
+        cursor: pointer;
+    }
+
+    /* Nút Thêm vào Lớp */
+    #execute-add-student-btn {
+        background-color: #4A6CF7; /* Màu primary */
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    #execute-add-student-btn:disabled {
+        background-color: #a5b4fc; /* Màu nhạt hơn khi disabled */
+        cursor: not-allowed;
+    }
+
+    #execute-add-student-btn i {
+        margin-right: 5px;
+    }
+    
+    /* ⭐ CLASS MỚI: Chặn cuộn trên body khi modal mở */
+    .modal-open {
+        overflow: hidden !important; 
+    }
+</style>
+</head>
+<body class="modal-open-fix"> <div class="dashboard-container">
+        <div id="sidebar-placeholder">
+            {% include "partials/sidebar.html" %}
+        </div>
+
+        <main class="main-content">
+            <div id="header-placeholder">
+                {% include "partials/header.html" %}
+            </div>
+            <div class="content-area">
+                
+<section id="dashboard" class="content-section active">
+    <h2>Tổng quan TC</h2>
+    
+    <div class="card-container">
+        <!-- <div class="card"><i class="fas fa-users"></i><h3 id="tc-total-students">...</h3><p>Tổng số Học viên</p></div> -->
+        <div class="card"><i class="fas fa-chalkboard-teacher"></i><h3 id="tc-total-teachers">...</h3><p>Tổng số Giáo viên</p></div>
+        <div class="card"><i class="fas fa-chalkboard"></i><h3 id="tc-active-classes">...</h3><p>Lớp học đang hoạt động</p></div>
+        <div class="card"><i class="fas fa-ticket-alt"></i><h3 id="tc-pending-tickets">...</h3><p>Ticket chờ xử lý</p></div>
+    </div>
+
+    <h3 style="margin-top: 30px; margin-bottom: 20px;">Phân tích Hiệu suất Tổng hợp</h3>
+    
+    <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 30px;">
+        
+        <div class="card" style="padding: 20px;">
+            <h4 style="margin-bottom: 15px;">Tỷ lệ Điểm danh Giảng viên</h4>
+            <div class="chart-container" style="height: 300px; max-height: 300px;">
+                <canvas id="attendance-pie-chart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card" style="padding: 20px;">
+            <h4 style="margin-bottom: 15px;">Điểm Trung bình Học viên (Toàn bộ lớp)</h4>
+            <div class="chart-container" style="height: 300px; max-height: 300px;">
+                <canvas id="grade-bar-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    </section>
+<section id="teacher-management" class="content-section">
+    <h2>Quản lý giáo viên</h2>
+    
+    <div class="page-header" style="margin-bottom: 20px;">
+        <button class="btn teacher-management-tab btn-primary active" data-tab="performance"><i class="fas fa-chart-bar"></i> Quan sát hiệu suất</button>
+        <button class="btn teacher-management-tab btn-secondary" data-tab="attendance"><i class="fas fa-calendar-check"></i> Điểm danh Giáo viên</button>
+        <button class="btn teacher-management-tab btn-secondary" data-tab="leave-request"><i class="fas fa-plane-departure"></i> Yêu cầu xin nghỉ</button>
+    </div>
+    
+    <div id="teacher-performance" class="tab-content active">
+        <h3>Hiệu suất Giáo viên trong tháng</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="teacher-performance-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div id="teacher-schedule" class="tab-content hidden" style="margin-top: 20px;">
+        <div class="form-box card">
+            <h3 style="margin-bottom: 20px;">Thực hiện Điểm danh Giảng viên</h3>
+            <form id="attendance-form">
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="form-group">
+                        <label for="att-class-id">Chọn Lớp học:</label>
+                        <select id="att-class-id" name="class_id" class="form-control" required></select>
+                    </div>
+                    
+                    <div class="form-group" id="class-schedule-container">
+                        <label for="att-schedule">Chọn Buổi học / Lịch:</label>
+                        <select id="att-schedule" name="schedule_info" class="form-control" required disabled>
+                            <option value="">-- Vui lòng chọn Lớp học trước --</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="form-group">
+                        <label for="att-lecturer-display">Giảng viên:</label>
+                        <input type="text" id="att-lecturer-display" class="form-control" value="-- Chưa có giảng viên --" readonly>
+                        <input type="hidden" id="att-lecturer-id" name="lecturer_id" value=""> 
+                    </div>
+
+                    <div class="form-group">
+                        <label for="att-status">Trạng thái Điểm danh:</label>
+                        <select id="att-status" name="attendance_status" class="form-control" required>
+                            <option value="Present">Có mặt (Present)</option>
+                            <option value="Late">Đến trễ (Late)</option>
+                            <option value="Absent">Vắng mặt (Absent)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="att-notes">Ghi chú (Tùy chọn):</label>
+                    <textarea id="att-notes" name="notes" class="form-control" placeholder="Lý do vắng mặt, sự cố, hoặc ghi chú khác..."></textarea>
+                </div>
+
+                <button type="submit" id="submit-attendance-btn" class="btn btn-primary" style="margin-top: 15px;">
+                    Xác nhận Điểm danh
+                </button>
+            </form>
+        </div>
+    </div>
+    
+<div id="teacher-leave-request" class="tab-content hidden" style="margin-top: 20px;">
+    
+    <div class="card" style="margin-bottom: 20px; padding: 20px;">
+        <h3>Tìm kiếm Yêu cầu Xin nghỉ</h3>
+        <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="lr-search">Tìm kiếm (GV/Mã Yêu cầu/Lý do):</label>
+                <input type="text" id="lr-search" class="form-control" placeholder="Tìm kiếm theo tên giảng viên hoặc ID yêu cầu...">
+            </div>
+
+            <div class="form-group">
+                <label for="lr-status-filter">Lọc theo Trạng thái:</label>
+                <select id="lr-status-filter" class="form-control">
+                    <option value="all">Tất cả</option>
+                    <option value="open">Chờ xử lý (Open)</option>
+                    <option value="approved">Đã Duyệt</option>
+                    <option value="rejected">Đã Từ chối</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="lr-sort">Sắp xếp theo Ngày:</label>
+                <select id="lr-sort" class="form-control">
+                    <option value="newest">Mới nhất</option>
+                    <option value="oldest">Cũ nhất</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="table-container">
+        <h3 style="margin-bottom: 15px;"><i class="fas fa-list-alt"></i> Danh sách Yêu cầu Xin nghỉ</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 20%;">Giảng viên</th>
+                    <th style="width: 15%;">Ngày xin nghỉ</th>
+                    <th style="width: 30%;">Lý do/Nội dung</th>
+                    <th style="width: 10%;">Trạng thái</th>
+                    <th style="width: 15%;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="leave-request-table-body">
+                </tbody>
+        </table>
+    </div>
+</div>
+</section>
+                
+                <div id="teacher-schedule-modal-overlay" class="modal-overlay hidden">
+                    <div class="modal" style="max-width: 800px;">
+                        <div class="modal-header">
+                            <h3 id="teacher-schedule-modal-title">Hiệu suất chi tiết</h3>
+                            <span id="close-teacher-schedule-modal-btn" class="close-modal">&times;</span>
+                        </div>
+                        <div class="modal-body" id="teacher-schedule-modal-body">
+                            </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" id="close-teacher-schedule-modal-btn-bottom">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+                <section id="class-management" class="content-section">
+    <h2>Quản lý lớp học</h2>
+    
+    <div class="page-header">
+        <div style="margin-bottom: 0px;">
+             <button class="btn class-management-tab btn-primary active" data-tab="class-list"><i class="fas fa-list"></i> Danh sách Lớp</button>
+             <button class="btn class-management-tab btn-secondary" data-tab="class-approval"><i class="fas fa-clipboard-check"></i> Duyệt Lớp đăng ký</button>
+        </div>
+        
+        <button id="add-class-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Tạo lớp học mới</button>
+        <input type="text" id="class-search-input" class="form-control" placeholder="Tìm kiếm lớp học...">
+    </div>
+
+    <div id="class-list" class="tab-content active">
+        <div class="table-container">
+            <h3>Danh sách Lớp học hiện tại</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã Lớp</th>
+                        <th>Tên Lớp</th>
+                        <th>Giáo viên</th>
+                        <th>Số HV</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="class-table-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div id="class-approval" class="tab-content hidden">
+        <div class="table-container">
+            <h3>Danh sách Lớp học chờ duyệt (GV đăng ký)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã Yêu cầu</th>
+                        <th>Tiêu đề</th>
+                        <th>Nội dung</th>
+                        <th>Giáo viên đề xuất</th>
+                        <th>Ngày bắt đầu mong muốn</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="class-approval-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+    
+</section>
+                
+                <section id="ticket-management" class="content-section">
+                    <h2>Quản lý Ticket</h2>
+                    
+                    <h3>Tạo Ticket Mới (<i class="fas fa-paper-plane"></i> Submit Ticket)</h3>
+                    <div class="form-box card">
+                        <div class="form-group">
+                            <label for="tc-ticket-title">Tiêu đề Ticket:</label>
+                            <input type="text" id="tc-ticket-title" class="form-control" placeholder="Nhập tiêu đề tóm tắt...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tc-ticket-description">Nội dung chi tiết:</label>
+                             <textarea id="tc-ticket-description" rows="4" class="form-control" placeholder="Mô tả chi tiết vấn đề..." style="resize: none;"></textarea>
+                        </div>
+
+                        <button id="tc-submit-ticket-btn" class="btn btn-primary"> Gửi Ticket</button>
+                    </div>
+
+                    <div class="table-container" style="margin-top: 30px;">
+                        <h3>Danh sách Ticket</h3>
+                        <table id="tc-ticket-list-table">
+                            <thead>
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Nội dung</th>
+                                    <th style="width: 60px;">Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tc-ticket-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="announcements" class="content-section">
+                    <h2>Thông báo</h2>
+                    
+                    <div class="form-box card" style="margin-bottom: 30px;">
+                         <h3>Soạn thông báo mới</h3>
+                        <form id="announcement-form">
+                            <div class="form-group">
+                                <label for="announcement-title">Tiêu đề</label>
+                                <input type="text" id="announcement-title" name="title" class="form-control" required placeholder="Nhập tiêu đề thông báo...">
+                            </div>
+                            <div class="form-group">
+                                <label for="announcement-content">Nội dung</label>
+                                <textarea id="announcement-content" name="content" rows="5" class="form-control" required placeholder="Nhập nội dung chi tiết..."></textarea>
+                            </div>
+                            <div class="form-footer" style="padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                                <button id="submit-announcement-btn" type="submit" class="btn btn-primary">
+                                    Gửi thông báo
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 20px; padding: 20px;">
+                        <h3>Lịch sử Thông báo</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="announcement-history-search">Tìm kiếm (Tiêu đề/Nội dung):</label>
+                                <input type="text" id="announcement-history-search" class="form-control" placeholder="Tìm kiếm theo tiêu đề hoặc nội dung thông báo...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="announcement-history-sort">Sắp xếp theo Ngày:</label>
+                                <select id="announcement-history-sort" class="form-control">
+                                    <option value="newest">Mới nhất</option>
+                                    <option value="oldest">Cũ nhất</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Nội dung</th>
+                                    <th>Ngày gửi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="announcements-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                </div>
+        </main>
+    </div>
+    
+    <div id="class-modal-overlay" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="class-modal-title">Tạo Lớp học mới</h3>
+                <span id="close-class-modal-btn" class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="class-form">
+                    <input type="hidden" id="class-id" name="id">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="class-name">Tên Lớp học</label>
+                            <input type="text" id="class-name" name="name" class="form-control" required placeholder="Ví dụ: Lập trình Web K12">
+                        </div>
+                        <div class="form-group">
+                            <label for="class-status">Trạng thái Lớp</label>
+                            <select id="class-status" name="status" class="form-control" required>
+                                <option value="active">Hoạt động (Active)</option>
+                                <option value="pending" selected>Chờ (Pending)</option>
+                                <option value="archived">Lưu trữ (Archived)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="class-teacher">Giáo viên phụ trách</label>
+                            <select id="teacher-select" name="teacherId" class="form-control"> 
+                                 <option value="">-- Chọn Giáo viên --</option>
+                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="class-place">Phòng học (Place)</label>
+                            <input type="text" id="class-place" name="place" class="form-control" required placeholder="VD: A101">
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                         <div class="form-group">
+                            <label for="class-start-date">Ngày bắt đầu</label>
+                            <input type="date" id="class-start-date" name="startDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class-start-time">Giờ bắt đầu</label>
+                            <input type="time" id="class-start-time" name="startTime" class="form-control" required placeholder="08:00" min="07:00", max="20:00">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="lock-class-btn" class="btn btn-danger hidden"><i class="fas fa-lock"></i> Khoá lớp học</button>
+                <button id="cancel-class-modal-btn" class="btn btn-secondary">Hủy</button>
+                <button id="save-class-btn" type="submit" form="class-form" class="btn btn-primary">Lưu Lớp học</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-modal-overlay" class="modal-overlay hidden">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="profile-modal-title">Thông tin Tài khoản</h3>
+                <span id="close-profile-modal-btn" class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                
+                <div id="profile-info-display">
+                    <p><strong>Tên đăng nhập:</strong> <span id="profile-username"></span></p>
+                    <p><strong>Emaiádasl:</strong> <span id="profile-email"></span></p>
+                </div>
+                
+                <div id="profile-edit-form" class="hidden">
+                    <div class="form-group">
+                        <label for="edit-username">Tên đăng nhập mới:</label>
+                        <input type="text" id="edit-username" class="form-control" disabled> 
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-email">Email:</label>
+                        <input type="email" id="edit-email" class="form-control" disabled readonly>
+                    </div>
+                    
+                    <hr style="margin: 20px 0;">
+                    
+                    <div class="form-group">
+                        <label for="new-password">Mật khẩu mới:</label>
+                        <input type="password" id="new-password" class="form-control" placeholder="Để trống nếu không muốn đổi mật khẩu">
+                    </div>
+                    <div class="form-group">
+                        <label for="current-password">Mật khẩu hiện tại (BẮT BUỘC để lưu thay đổi):</label>
+                        <input type="password" id="current-password" class="form-control" placeholder="Nhập mật khẩu hiện tại" required>
+                    </div>
+                    <p class="text-danger hidden" id="password-error" style="color: red; font-size: 0.9em;">Mật khẩu không đúng.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-profile-btn" class="btn btn-secondary">Đóng</button>
+                </div>
+        </div>
+    </div>
+
+<div id="add-student-modal-overlay" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2 id="add-student-modal-title">Thêm Học Viên vào Lớp</h2>
+            <button class="close-modal" id="close-add-student-modal-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Lớp: <strong id="add-student-class-info"></strong></p>
+            <div class="search-box">
+                <input type="text" id="available-student-search" placeholder="Tìm kiếm tên hoặc email học viên..." class="form-control" style="width: 100%;">
+            </div>
+            <div class="table-container" style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
+                <table class="data-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">ID</th>
+                            <th>Tên học viên</th>
+                            <th>Email</th>
+                            <th style="width: 10%;">Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody id="available-students-table-body">
+                        <tr><td colspan="4" style="text-align: center;">Đang tải danh sách...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 15px;">Đã chọn: <strong id="selected-student-count">0</strong> học viên.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancel-add-student-btn">Hủy</button>
+            <button class="btn btn-primary" id="execute-add-student-btn" disabled>
+                <i class="fas fa-user-plus"></i> Thêm vào Lớp
+            </button>
+        </div>
+    </div>
+</div>
+
+    <div id="confirm-modal-overlay" class="modal-overlay hidden">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 id="confirm-modal-title">Xác nhận hành động</h3>
+                <span id="close-confirm-modal-btn" class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body" id="confirm-modal-message">
+                <p>Bạn có chắc chắn muốn thực hiện hành động này không?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-confirm-btn" class="btn btn-secondary">Hủy</button>
+                <button id="execute-confirm-btn" class="btn btn-primary">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/tc.js"></script>
+</body>

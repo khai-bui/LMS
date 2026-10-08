@@ -1,0 +1,30 @@
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.history/
+
+# Virtual environments
+venv/
+.env/
+.venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Logs and temporary files
+*.log
+*.pot
+*.pyc
+.DS_Store
+*.sqlite3
+
+# Testing
+.coverage
+.pytest_cache/

@@ -1,0 +1,318 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Đang đổ dữ liệu cho bảng `ROLES`
+--
+INSERT INTO `ROLES` (`role_id`, `role_name`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'manager', 'System Manager - quản trị toàn hệ thống', '2025-01-01 09:00:00', NULL),
+(2, 'tc', 'Training Coordinator - điều phối đào tạo', '2025-01-01 09:00:00', NULL),
+(3, 'cs', 'Customer Support - chăm sóc học viên', '2025-01-01 09:00:00', NULL),
+(4, 'lec', 'Lecturer - giảng viên', '2025-01-01 09:00:00', NULL),
+(5, 'student', 'Student - học viên', '2025-01-01 09:00:00', NULL);
+
+--
+-- Đang đổ dữ liệu cho bảng `USERS`
+--
+INSERT INTO `USERS` (`user_id`, `name`, `email`, `password_hash`, `role_id`, `status`, `created_at`) VALUES
+(1, 'manager', 'manager@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 1, 'active', '2025-01-10 10:00:00'),
+(2, 'van', 'gv.vana@lms.edu', '$2b$12$pKlQ9NOO7tdK42oyCJJ4z.zQbdlg4LtAFcWPWskvV2y15tKLQL.02', 4, 'active', '2025-01-11 11:00:00'),
+(3, 'tranthib', 'gv.thib@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 4, 'active', '2025-01-11 12:00:00'),
+(4, 'Le Van C', 'gv.vanc@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 4, 'active', '2025-01-11 13:00:00'),
+(5, 'Pham Thi D', 'gv.thid@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 4, 'active', '2025-01-11 14:00:00'),
+(6, 'Nguyen Van E', 'sv.vane@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 09:00:00'),
+(7, 'Tran Thi F', 'sv.thif@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 09:10:00'),
+(8, 'Le Van G', 'sv.vang@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 09:20:00'),
+(9, 'Pham Thi H', 'sv.thih@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 09:30:00'),
+(10, 'Vu Van I', 'sv.vani@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 09:40:00'),
+(11, 'Dang Thi K', 'sv.thik@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 09:50:00'),
+(12, 'Hoang Van L', 'sv.vanl@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'deactivated', '2025-02-01 10:00:00'),
+(13, 'ngothim', 'sv.thim@lms.edu', '$2b$12$Wg91ttxKwGD9fBeOYnVz/etixcyGQJUy89fqc1u6eq3Q.t6V/bDzy', 5, 'deactivated', '2025-02-01 10:10:00'),
+(14, 'Do Van N', 'sv.vann@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 10:20:00'),
+(15, 'Bui Thi P', 'sv.thip@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-02-01 10:30:00'),
+(16, 'tc', 'tc.user@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 2, 'active', '2025-01-10 10:10:00'),
+(17, 'cs', 'cs.user@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 3, 'active', '2025-01-10 10:20:00'),
+(29, 'Bui Minh K', 'sv.minhk@lms.edu', '$2b$12$WqOiib6UaUlGIlqcDpcL9eeUuoXAjQw1r/ADV7FvyBcZmlQ5FBma6', 5, 'active', '2025-10-23 15:20:56'),
+(30, 'Vo Gia H', 'sv.giah@lms.edu', '$2b$12$E/q/FezoMx/BrkEJhsjSS.9EsxR5ALHMm0fL39qXMOZrlxhAUEJ9q', 5, 'active', '2025-10-24 12:07:10'),
+(31, 'Duong Minh H', 'sv.minhh@student', '$2b$12$uUohkN4Hr3Qhm5I4T8KcBO2j6Vznc.rxV/2Jjqwil8jlnPBwh5mny', 2, 'active', '2025-10-24 15:23:39'),
+(32, 'Dang Van T', 'vant@lms.edu', '$2b$12$ZxdDkfNKjK56yUX5YFuAv.raWgZNhf/ZpflGFokv5QeBeWJ1BxVV2', 5, 'active', '2025-10-28 16:07:45'),
+(33, 'Bui Thai S', 'sv.thais@lms.edu', '$2b$12$IIHaSqWFBG/S/x3sAkmy7OrXfXjeMcJPd9.W/91Oe4HvKg8D2kYkC', 3, 'active', '2025-10-31 13:13:02'),
+(34, 'Duong Gia H', 'sv.dgiah@lms.edu', '$2b$12$cNgTcqhC7DOLOejvKDXRpeX6y5R.d7jotkY01ANykrO9FjCrle772', 5, 'active', '2025-10-31 14:04:03');
+
+--
+-- Đang đổ dữ liệu cho bảng `LECTURERS`
+--
+INSERT INTO `LECTURERS` (`lecturer_id`, `user_id`, `department`) VALUES
+(1, 2, 'Công nghệ thông tin'),
+(2, 3, 'Quản trị kinh doanh'),
+(3, 4, 'Công nghệ thông tin'),
+(4, 5, 'Ngôn ngữ Anh');
+
+--
+-- Đang đổ dữ liệu cho bảng `STUDENTS`
+--
+INSERT INTO `STUDENTS` (`student_id`, `user_id`, `enrollment_date`, `status`) VALUES
+(1, 6, '2025-02-01', 'active'),
+(2, 7, '2025-02-01', 'active'),
+(3, 8, '2025-02-01', 'active'),
+(4, 9, '2025-02-01', 'active'),
+(5, 10, '2025-02-01', 'active'),
+(6, 11, '2025-02-01', 'active'),
+(7, 12, '2025-02-01', 'inactive'),
+(8, 13, '2025-02-01', 'active'),
+(9, 14, '2025-02-01', 'active'),
+(10, 15, '2025-02-01', 'active'),
+(11, 30, '2025-10-24', 'active'),
+(12, 32, '2025-10-28', 'active'),
+(13, 34, '2025-10-31', 'active'),
+(14, 33, '2025-11-01', 'active');
+
+--
+-- Đang đổ dữ liệu cho bảng `FILES`
+--
+INSERT INTO `FILES` (`file_id`, `original_filename`, `saved_filename`, `file_size`, `content_type`, `created_at`, `uploader_user_id`) VALUES
+(1, 'BaiGiang_Chuong1_Python.pdf', 'dc211c43-afef-11f0-b613-b42e99813b1b.pdf', 1024500, 'application/pdf', '2025-09-05 07:00:00', 2),
+(2, 'DeBai_CuoiKy_Python.pdf', 'dc2124dc-afef-11f0-b613-b42e99813b1b.pdf', 204800, 'application/pdf', '2025-10-10 08:00:00', 2),
+(3, 'Marketing_Slides_Week1.pptx', 'dc212581-afef-11f0-b613-b42e99813b1b.pptx', 5120000, 'application/vnd.openxmlformats-officedocument.presentationml.presentation', '2025-09-05 12:00:00', 3),
+(4, 'Assignment_Marketing.docx', 'dc2125d6-afef-11f0-b613-b42e99813b1b.docx', 15360, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '2025-10-11 09:00:00', 3),
+(5, 'DeCuong_DB_PhanTan.pdf', 'dc21262b-afef-11f0-b613-b42e99813b1b.pdf', 450000, 'application/pdf', '2025-09-06 07:00:00', 1),
+(6, 'SV_E_BaiTap1.zip', 'dc212671-afef-11f0-b613-b42e99813b1b.zip', 2048, 'application/zip', '2025-10-15 10:00:00', 6),
+(7, 'SV_G_BaiTap1.pdf', 'dc2126b8-afef-11f0-b613-b42e99813b1b.pdf', 307200, 'application/pdf', '2025-10-15 11:00:00', 8),
+(8, 'SV_I_BaiTap1.py', 'dc2126f9-afef-11f0-b613-b42e99813b1b.py', 5120, 'text/x-python', '2025-10-15 12:00:00', 10),
+(9, 'SV_F_Marketing_Plan.pdf', 'dc212740-afef-11f0-b613-b42e99813b1b.pdf', 1200000, 'application/pdf', '2025-10-16 14:00:00', 7),
+(10, 'SV_H_Marketing_Analysis.docx', 'dc212781-afef-11f0-b613-b42e99813b1b.docx', 25600, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '2025-10-16 15:00:00', 9),
+(11, 'SV_E_BaiTap1_GRADED.pdf', 'dc2127c3-afef-11f0-b613-b42e99813b1b.pdf', 2050, 'application/pdf', '2025-10-20 09:00:00', 2),
+(12, 'SV_G_BaiTap1_GRADED.pdf', 'dc212805-afef-11f0-b613-b42e99813b1b.pdf', 307300, 'application/pdf', '2025-10-20 10:00:00', 2),
+(13, 'SV_F_Marketing_Plan_FEEDBACK.pdf', 'dc21284c-afef-11f0-b613-b42e99813b1b.pdf', 1200100, 'application/pdf', '2025-10-21 11:00:00', 3),
+(14, 'SV_E_BaiTap2_Python.zip', 'dc21288d-afef-11f0-b613-b42e99813b1b.zip', 3000, 'application/zip', '2025-10-22 10:00:00', 6),
+(15, 'SV_G_BaiTap2_Python.zip', 'dc2128ce-afef-11f0-b613-b42e99813b1b.zip', 4000, 'application/zip', '2025-10-22 11:00:00', 8),
+(16, 'demo.txt', 'a5cf9112-74ec-4521-86a2-f7679673f74e.txt', 84, 'text/plain', '2025-10-23 23:12:30', 6),
+(17, 'demo.txt', '14a2f7a8-7c30-450c-a130-d2619603dcba.txt', 84, 'text/plain', '2025-10-23 23:15:36', 6),
+(18, 'demo.txt', '50ff01e9-6270-41d2-829e-c02e179cae36.txt', 84, 'text/plain', '2025-10-23 23:16:04', 6),
+(19, 'Lab04_updated.pdf', 'a59d1379-9121-4e2a-bbc2-f9db5cf95a66.pdf', 981361, 'application/pdf', '2025-10-25 12:01:54', 6),
+(20, 'mh.jpg', 'c5f334f4-2401-4cdd-bd1f-b079c01a2226.jpg', 21026, 'image/jpeg', '2025-10-25 21:48:13', 2),
+(21, 'blob', '0eed88ee-ab9c-4c81-ad1b-5ec0c8be3c4e', 0, 'application/octet-stream', '2025-10-29 16:09:58', 2),
+(22, 'Lab06_updated.pdf', '9cf68c32-4659-4ea0-b157-82a602d39a02.pdf', 971218, 'application/pdf', '2025-10-29 16:11:51', 2),
+(23, 'Lab07_updated.pdf', '2b7b2cb5-aee1-422b-ad10-c83a3f5019f6.pdf', 78895, 'application/pdf', '2025-10-29 16:42:25', 2),
+(24, 'Lab07_updated.pdf', 'ad6f4279-9372-4200-b430-feea20950222.pdf', 78895, 'application/pdf', '2025-10-30 18:03:39', 2),
+(25, 'Lab08.pdf', '25b227c8-a8f0-46be-a35c-6c0c083a1610.pdf', 636829, 'application/pdf', '2025-11-01 08:44:28', 2),
+(26, 'Lab08_Huong dan.pdf', '4fe0cf1c-c641-47b2-850d-aa0c30c3ee80.pdf', 49692, 'application/pdf', '2025-11-01 08:45:27', 2),
+(27, 'Lab08_Huong dan.pdf', '9e7bcffb-c151-4f0f-ae64-4098b86542ce.pdf', 49692, 'application/pdf', '2025-11-01 08:49:27', 2),
+(28, 'Lab08_Huong dan.pdf', 'be333479-8322-430a-a59e-3b0787b8069a.pdf', 49692, 'application/pdf', '2025-11-01 08:51:00', 2),
+(29, 'Lab08_Huong dan.pdf', 'c0173c3f-bb29-4cfa-9c7a-83d6ecd7852e.pdf', 49692, 'application/pdf', '2025-11-01 08:52:18', 2),
+(30, 'Lab08_Huong dan.pdf', '58689d11-c241-44f4-bcae-3e8f8c6cb87c.pdf', 49692, 'application/pdf', '2025-11-01 08:53:10', 2),
+(31, 'Lab08_Huong dan.pdf', 'd1a5c7f3-e5e4-465b-868b-c539499ad7d6.pdf', 49692, 'application/pdf', '2025-11-01 08:56:05', 2),
+(32, 'Lab08.pdf', '2a584574-45ef-4c6f-9cc1-089ffe6c7bed.pdf', 636829, 'application/pdf', '2025-11-01 09:12:13', 6),
+(33, 'Lab08_Huong dan.pdf', '6bc88dc1-12c8-4a46-bb2c-d560e0e5359f.pdf', 49692, 'application/pdf', '2025-11-01 09:13:08', 6);
+
+--
+-- Đang đổ dữ liệu cho bảng `REPORTS`
+--
+INSERT INTO `REPORTS` (`report_id`, `generated_by`, `report_type`, `file_url`, `created_at`) VALUES
+(1, 1, 'User Activity', '/reports/user_activity_20251001.pdf', '2025-10-01 05:00:00'),
+(2, 2, 'Class Gradebook (Class 1)', '/reports/class_1_grades_20251020.csv', '2025-10-20 18:00:00'),
+(3, 1, 'System Health', '/reports/system_health_20251022.pdf', '2025-10-22 06:00:00');
+
+--
+-- Đang đổ dữ liệu cho bảng `NOTIFICATIONS`
+--
+INSERT INTO `NOTIFICATIONS` (`notification_id`, `user_id`, `title`, `message`, `is_read`, `created_at`) VALUES
+(1, 6, 'Bài tập 1 đã được chấm', 'GV đã chấm Bài tập 1: Cấu trúc dữ liệu của bạn. Điểm: 8.5', 0, '2025-10-20 09:00:00'),
+(2, 8, 'Bài tập 1 đã được chấm', 'GV đã chấm Bài tập 1: Cấu trúc dữ liệu của bạn. Điểm: 9.0', 1, '2025-10-20 10:00:00'),
+(3, 10, 'Bài tập 1 đã được chấm', 'GV đã chấm Bài tập 1: Cấu trúc dữ liệu của bạn. Điểm: 7.0', 0, '2025-10-20 10:30:00'),
+(4, 7, 'Bài tập nhóm đã được chấm', 'GV đã chấm Bài tập nhóm: Phân tích thị trường. Điểm: 9.5', 0, '2025-10-21 11:00:00'),
+(5, 2, 'Sinh viên 1 đã nộp bài', 'Sinh viên Nguyen Van E đã nộp Bài tập 2.', 1, '2025-10-22 10:00:00'),
+(6, 2, 'Sinh viên 3 đã nộp bài', 'Sinh viên Le Van G đã nộp Bài tập 2.', 0, '2025-10-22 11:00:00'),
+(7, 1, 'Lớp học mới đã được tạo', 'Lớp Lập trình Python Nâng cao đã được tạo.', 1, '2025-08-01 10:00:00'),
+(8, 6, 'Thông báo từ GV', 'Các em chú ý deadline Bài tập 2.', 0, '2025-10-21 15:00:00'),
+(9, 7, 'Thông báo từ GV', 'Các em chú ý deadline Bài tập 2.', 0, '2025-10-21 15:00:00'),
+(10, 8, 'Thông báo từ GV', 'Các em chú ý deadline Bài tập 2.', 0, '2025-10-21 15:00:00'),
+(26, 1, 'Cập nhật hệ thống', 'Vào khoảng 0h ngày 5/11 hệ thống cập nhật, giảng viên và học sinh lưu ý.', 0, '2025-11-01 12:30:40'),
+(27, 1, 'Tổ chức thi đua quý 4 2025', 'Toàn bộ giảng viên, cán bộ chú ý. Trung tâm sẽ tổ chức đánh giá tiến độ làm việc quý 4 2025 sau đó tiến hành khen thưởng.', 0, '2025-11-01 12:32:20');
+
+--
+-- Đang đổ dữ liệu cho bảng `TICKETS`
+--
+INSERT INTO `TICKETS` (`ticket_id`, `submitted_by`, `assigned_to`, `issue_type`, `title`, `description`, `status`, `created_at`, `resolved_at`) VALUES
+(1, 6, 1, 'Support', 'Không thể upload file', 'Em không thể upload file bài nộp cho Task 2.', 'resolved', '2025-10-14 08:00:00', '2025-10-30 18:09:38'),
+(2, 3, 17, 'Support', 'Sai lịch thi', 'Lịch thi môn Marketing bị trùng.', 'open', '2025-10-15 09:00:00', NULL),
+(3, 9, 17, 'Support', 'Quên mật khẩu', 'Em quên mật khẩu, email sv.thih@lms.edu', 'resolved', '2025-10-16 10:00:00', '2025-10-16 11:00:00'),
+(4, 2, 1, 'Support', 'Đề xuất tính năng chat', 'Hệ thống nên có tính năng chat real-time.', 'open', '2025-10-17 11:00:00', NULL),
+(5, 7, 17, 'Support', 'Không thấy điểm', 'Em đã nộp bài 1 nhưng không thấy điểm.', 'resolved', '2025-10-22 14:00:00', '2025-10-22 15:00:00'),
+(6, 6, 1, 'Student Feedback', 'Giảng viên lớp Lập trình Python Nâng cao', 'Thầy dạy quá nhanh, em không bắt kịp nhịp độ', 'resolved', '2025-10-23 21:27:35', '2025-10-25 17:33:13'),
+(9, 17, 1, 'CS Issue', 'Lớp học mới', 'Nhiều học sinh muốn mở lớp học Trí Tuệ Nhân Tạo', 'resolved', '2025-10-24 20:18:13', '2025-10-25 07:59:44'),
+(10, 2, 1, 'Class Request', 'Class Assignment Request for Class ID: 7', 'Lecturer with user_id 2 has requested to be assigned to class \'Xử Lý Âm Thanh\' (ID: 7).', 'resolved', '2025-10-24 15:16:49', '2025-10-29 14:29:45'),
+(11, 2, 1, 'Class Request', 'Class Assignment Request for Class ID: 6', 'Lecturer with user_id 2 has requested to be assigned to class \'Học Máy Ứng dụng\' (ID: 6).', 'resolved', '2025-10-24 23:59:22', '2025-10-29 14:29:54'),
+(12, 2, 1, 'Class Request', 'Class Assignment Request for Class ID: 8', 'Lecturer with user_id 2 requested assignment to class \'Đồ Hoạ Trò Chơi\' (ID: 8).', 'resolved', '2025-10-25 15:36:42', '2025-10-29 14:30:04'),
+(14, 2, 1, 'Class Request', 'Class Assignment Request for Class ID: 9', 'Lecturer with user_id 2 requested assignment to class \'Web API với FastAPI\' (ID: 9).', 'resolved', '2025-10-27 08:36:02', '2025-10-29 14:32:09'),
+(17, 3, 1, 'Class Request', 'Class Assignment Request for Class ID: 9', 'Lecturer with user_id 3 requested assignment to class \'Web API với FastAPI\' (ID: 9).', 'resolved', '2025-10-28 06:42:45', '2025-10-28 15:18:14'),
+(18, 3, 1, 'System Bug', 'Lỗi phân công lớp học', 'Không thể phân công giảng viên cho lớp LEC102.', 'open', '2025-10-28 15:18:54', NULL),
+(20, 3, 1, 'System Bug', 'Lỗi phân công lớp học', 'Không thể phân công giảng viên cho lớp LEC102.', 'open', '2025-10-28 21:29:46', NULL),
+(21, 3, 1, 'Class Request', 'Class Assignment Request for Class ID: 9', 'Lecturer with user_id 3 requested assignment to class \'Web API với FastAPI\' (ID: 9).', 'resolved', '2025-10-28 15:49:07', '2025-10-30 18:00:09'),
+(23, 16, 1, 'Account Request', 'string', 'string\n\n---JSON_DATA_START---\n[\n  {\n    \"name\": \"avc\",\n    \"email\": \"string\",\n    \"password\": \"123456\"\n  }\n]', 'resolved', '2025-10-28 15:56:37', '2025-10-29 10:05:19'),
+(24, 2, 1, 'Leave Request', 'Leave Request: User 2 - Class 1 - Date 2025-10-29T08:00:00', 'Lecturer: vanani (ID: 2)\nClass: Lập trình Python Nâng  (ID: 1)\nDate: 2025-10-29T08:00:00\nReason: Việc cá nhân', 'resolved', '2025-10-28 17:48:40', '2025-10-28 18:01:33'),
+(25, 2, 1, 'Leave Request', 'Leave Request: User 2 - Class 1 - Date 2025-11-04T08:00:00+00:00', 'Lecturer: vanani (ID: 2)\nClass: Lập trình Python Nâng  (ID: 1)\nDate: 2025-11-04T08:00:00+00:00\nReason: Vợ đẻ', 'open', '2025-10-29 06:02:02', NULL),
+(26, 16, 1, 'TC Issue', 'Huỷ bỏ tài khoản Giảng viên', 'Giảng viên H tạm thời có việc cá nhân, không thể tiếp tục giảng dạy', 'resolved', '2025-10-29 14:01:56', '2025-10-29 14:02:22'),
+(27, 16, 1, 'TC Issue', 'Cung cấp thiết bị học tập', 'Phòng C111 cần có thêm tivi để trình chiếu', 'resolved', '2025-10-29 14:05:16', '2025-10-29 14:05:20'),
+(31, 17, 1, 'Account Request', '[Yêu Cầu TK] Học viên mới: Van A', 'CS tạo yêu cầu tạo tài khoản cho học viên mới.\n- Họ tên: Van A\n- Email: vana@lms.edu\n- Username: Van A\n\n---JSON_DATA_START---\n[\n  {\n    \"name\": \"Van A\",\n    \"email\": \"vana@lms.edu\",\n    \"password\": \"123456\"\n  }\n]', 'resolved', '2025-10-29 16:14:06', '2025-10-31 14:04:03'),
+(32, 17, 1, 'Account Request', '[Yêu Cầu TK] Học viên mới: test lại', 'CS tạo yêu cầu tạo tài khoản cho học viên mới.\n- Họ tên: test lại\n- Email: cscscs@lms.edu\n- Username: cscscs\n\n---JSON_DATA_START---\n[\n  {\n    \"name\": \"test lại\",\n    \"email\": \"cscscs@lms.edu\",\n    \"password\": \"123456\"\n  }\n]', 'resolved', '2025-10-29 17:02:39', '2025-11-01 00:11:53'),
+(33, 2, 1, 'Leave Request', 'Leave Request: User 2 - Class 8 - Date 2025-10-27T08:00:00+00:00', 'Lecturer: vanani (ID: 2)\nClass: Đồ Hoạ Trò Chơi (ID: 8)\nDate: 2025-10-27T08:00:00+00:00\nReason: Sức khoẻ', 'resolved', '2025-10-30 10:17:58', '2025-10-30 15:56:28'),
+(34, 2, 1, 'Class Request', 'Class Assignment Request for Class ID: 11', 'Lecturer with user_id 2 requested assignment to class \'Testing\' (ID: 11).', 'resolved', '2025-10-30 10:17:58', '2025-10-31 15:42:07'),
+(36, 6, 1, 'Student Feedback', 'Tương tác lớp học', 'Em nghĩ là giáo viên nên tổ chức nhiều hoạt đồng trò chơi', 'open', '2025-10-30 23:02:30', NULL),
+(37, 4, 1, 'Class Request', 'Class Assignment Request for Class ID: 9', 'Lecturer with user_id 4 requested assignment to class \'Web API với FastAPI\' (ID: 9).', 'resolved', '2025-10-31 14:53:21', '2025-10-31 15:41:15'),
+(38, 2, 1, 'Class Request', 'Class Assignment Request for Class ID: 12', 'Lecturer with user_id 2 requested assignment to class \'Testing Manual\' (ID: 12).', 'resolved', '2025-10-31 14:53:21', '2025-10-31 22:43:12'),
+(39, 17, 1, 'Account Request', '[Yêu Cầu TK] Học viên mới: tester', 'CS tạo yêu cầu tạo tài khoản cho học viên mới.\n- Họ tên: tester\n- Email: tester@lms.edu\n- Username: tester\n\n---JSON_DATA_START---\n[\n  {\n    \"name\": \"tester\",\n    \"email\": \"tester@lms.edu\",\n    \"password\": \"123456\"\n  }\n]', 'resolved', '2025-11-01 00:03:02', '2025-11-01 00:17:16'),
+(40, 17, 1, 'Account Request', '[Yêu Cầu TK] Học viên mới: tester', 'CS tạo yêu cầu tạo tài khoản cho học viên mới.\n- Họ tên: tester\n- Email: tester@lms.edu\n- Username: tester\n\n---JSON_DATA_START---\n[\n  {\n    \"name\": \"tester\",\n    \"email\": \"tester@lms.edu\",\n    \"password\": \"123456\"\n  }\n]', 'resolved', '2025-11-01 00:03:02', '2025-11-01 00:20:07'),
+(41, 6, 1, 'Student Feedback', 'Mạng Internet', 'Lớp A101 Wifi quá yếu để truy cập Internet', 'open', '2025-11-01 07:55:46', NULL),
+(42, 2, 1, 'Leave Request', 'Leave Request: User 2 - Class 11 - Date 2025-10-30T12:00:00+00:00', 'Lecturer: van (ID: 2)\nClass: Testing (ID: 11)\nDate: 2025-10-30T12:00:00+00:00\nReason: Nhà có giỗ', 'open', '2025-11-01 00:59:06', NULL);
+
+--
+-- Đang đổ dữ liệu cho bảng `CLASSES`
+--
+INSERT INTO `CLASSES` (`class_id`, `class_name`, `lecturer_id`, `schedule`, `created_by`, `status`, `created_at`, `place`) VALUES
+(1, 'Lập trình Python Nâng ', 1, '{date: 2025-10-22T08:00:00+00:00 status: active},{date: 2025-10-29T08:00:00+00:00 status: active},{date: 2025-11-05T08:00:00+00:00 status: active},{date: 2025-11-12T08:00:00+00:00 status: active}', 16, 'active', '2025-08-01 10:00:00', 'F101'),
+(2, 'Marketing Kỹ thuật số', 2, '{date: 2025-09-05T13:00:00+00:00 status: active},{date: 2025-09-12T13:00:00+00:00 status: active},{date: 2025-09-19T13:00:00+00:00 status: active},{date: 2025-09-26T13:00:00+00:00 status: active}', 1, 'active', '2025-08-01 11:00:00', 'B202'),
+(3, 'Cơ sở dữ liệu Phân tán', 3, '{date: 2025-09-06T08:00:00+00:00 status: active},{date: 2025-09-13T08:00:00+00:00 status: active},{date: 2025-09-20T08:00:00+00:00 status: active},{date: 2025-09-27T08:00:00+00:00 status: active}', 1, 'active', '2025-08-01 12:00:00', 'A102'),
+(4, 'Kỹ năng Viết Tiếng Anh Học thuật', 4, '{date: 2025-09-06T13:00:00+00:00 status: active},{date: 2025-09-13T13:00:00+00:00 status: active},{date: 2025-09-20T13:00:00+00:00 status: active},{date: 2025-09-27T13:00:00+00:00 status: active}', 1, 'active', '2025-08-01 13:00:00', 'C303'),
+(5, 'Học Máy Ứng dụng', 1, '{date: 2025-09-07T12:00:00+00:00 status: deactived},{date: 2025-09-14T12:00:00+00:00 status: active},{date: 2025-09-21T12:00:00+00:00 status: active},{date: 2025-09-28T12:00:00+00:00 status: active}', 1, 'active', '2025-08-01 14:00:00', 'A301'),
+(6, 'Học Máy Nâng cao', 1, '{date: 2025-09-07T14:00:00+00:00 status: active},{date: 2025-09-14T14:00:00+00:00 status: active},{date: 2025-09-21T14:00:00+00:00 status: active},{date: 2025-09-28T14:00:00+00:00 status: active}', 1, 'active', '2025-08-01 14:00:00', 'A301'),
+(7, 'Xử Lý Âm Thanh', 1, '{date: 2025-09-07T08:00:00+00:00 status: active},{date: 2025-09-14T08:00:00+00:00 status: active},{date: 2025-09-21T08:00:00+00:00 status: active},{date: 2025-09-28T08:00:00+00:00 status: active}', 1, 'active', '2025-08-01 14:00:00', 'A306'),
+(8, 'Đồ Hoạ Trò Chơi', 1, '{date: 2025-10-27T08:00:00+00:00 status: deactived},{date: 2025-11-03T08:00:00+00:00 status: active},{date: 2025-11-10T08:00:00+00:00 status: active},{date: 2025-11-17T08:00:00+00:00 status: active}', 16, 'active', '2025-10-25 01:35:43', 'A101'),
+(9, 'Web API với FastAPI', 3, '{date: 2025-09-05T13:00:00+00:00 status: active},{date: 2025-09-12T13:00:00+00:00 status: active},{date: 2025-09-19T13:00:00+00:00 status: active},{date: 2025-09-26T13:00:00+00:00 status: active}', 16, 'active', '2025-10-25 01:54:19', 'C111'),
+(10, 'Phân tích kinh doanh', NULL, '{date: 2025-10-29T10:00:00 status: active},{date: 2025-11-05T10:00:00 status: active},{date: 2025-11-12T10:00:00 status: active},{date: 2025-11-19T10:00:00 status: active}', 16, 'active', '2025-10-29 07:32:39', 'C120'),
+(11, 'Xử lý ảnh', 1, '{date: 2025-10-30T12:00:00+00:00 status: active},{date: 2025-11-06T12:00:00+00:00 status: active},{date: 2025-11-13T12:00:00+00:00 status: active},{date: 2025-11-20T12:00:00+00:00 status: active}', 16, 'active', '2025-10-30 10:39:33', 'C121'),
+(12, 'Testing Automatic', NULL, '{date: 2025-10-31T16:00:00+00:00 status: active},{date: 2025-11-07T16:00:00+00:00 status: active},{date: 2025-11-14T16:00:00+00:00 status: active},{date: 2025-11-21T16:00:00+00:00 status: active}', 16, 'pending', '2025-10-31 14:33:04', 'F122');
+
+--
+-- Đang đổ dữ liệu cho bảng `LECTURERS_ATTENDANCE`
+--
+INSERT INTO `LECTURERS_ATTENDANCE` (`lecturer_attendance_id`, `lecturer_id`, `class_id`, `attendance_date`, `status`, `notes`) VALUES
+(1, 1, 1, '2025-09-05', 'present', 'Dạy buổi 1'),
+(2, 1, 1, '2025-09-12', 'present', 'Dạy buổi 2'),
+(3, 2, 2, '2025-09-05', 'present', 'Dạy buổi 1'),
+(4, 2, 2, '2025-09-12', 'late', 'Trễ 10 phút'),
+(5, 3, 3, '2025-09-06', 'present', 'Dạy buổi 1'),
+(6, 1, 1, '2025-10-26', 'present', 'Test'),
+(7, 1, 1, '2025-10-27', 'present', 'test'),
+(8, 1, 1, '2025-10-28', 'present', ''),
+(9, 2, 2, '2025-10-28', 'present', ''),
+(10, 3, 3, '2025-10-28', 'present', ''),
+(11, 1, 1, '2025-10-29', 'present', 'test'),
+(12, 2, 2, '2025-09-26', 'absent', 'Tets');
+
+--
+-- Đang đổ dữ liệu cho bảng `TASKS`
+--
+INSERT INTO `TASKS` (`task_id`, `title`, `description`, `task_type`, `due_date`, `class_id`, `attached_file_id`) VALUES
+(1, 'Bài giảng Chương 1: Giới thiệu Python', 'Slide bài giảng chương 1.', 'material', NULL, 1, 1),
+(2, 'Bài tập 1: Cấu trúc dữ liệu', 'Nộp file zip code bài tập 1.', 'assignment', '2025-10-15 23:59:00', 1, NULL),
+(3, 'Bài tập 2: Lập trình Hướng đối tượng', 'Nộp file zip code bài tập 2.', 'assignment', '2025-10-25 23:59:00', 1, 2),
+(4, 'Bài giảng Tuần 1: Tổng quan Marketing', 'Slide bài giảng tuần 1.', 'material', NULL, 2, 3),
+(5, 'Bài tập nhóm: Phân tích thị trường', 'Nộp file PDF Kế hoạch Marketing.', 'assignment', '2025-10-20 23:59:00', 2, 4),
+(6, 'Tài liệu: Đề cương môn học', 'Đề cương chi tiết CS CSDL Phân tán.', 'material', NULL, 3, 5),
+(7, 'Bài tập 1: Sharding & Replication', 'Trình bày 2 khái niệm.', 'assignment', '2025-10-10 23:59:00', 3, NULL),
+(8, 'Bài tập 2: NoSQL Databases', 'So sánh MongoDB và Cassandra.', 'assignment', '2025-10-20 23:59:00', 3, NULL),
+(9, 'Tài liệu: Academic Writing Guide', 'Hướng dẫn viết.', 'material', NULL, 4, NULL),
+(10, 'Tài liệu: AI Ứng dụng', 'Slide bài giảng (lớp đã lưu trữ).', 'material', NULL, 5, NULL),
+(16, 'Bài tập thực hành', 'Thực hiện các yêu cầu được nêu rõ trong file', 'assignment', '2025-10-17 00:00:00', 1, 26),
+(21, 'Bài tập tổng hợp', 'Làm theo hướng dẫn và nộp source code', 'assignment', '2025-11-14 00:00:00', 1, 31);
+
+--
+-- Đang đổ dữ liệu cho bảng `CLASS_ASSIGNMENTS`
+--
+INSERT INTO `CLASS_ASSIGNMENTS` (`assignment_id`, `class_id`, `student_id`) VALUES
+(1, 1, 1),
+(2, 1, 3),
+(3, 1, 5),
+(4, 1, 7),
+(5, 1, 9),
+(17, 1, 11),
+(18, 1, 12),
+(6, 2, 2),
+(7, 2, 4),
+(8, 2, 6),
+(9, 2, 8),
+(16, 2, 9),
+(10, 2, 10),
+(11, 3, 1),
+(12, 3, 2),
+(13, 3, 3),
+(14, 3, 4),
+(15, 3, 5),
+(19, 7, 11),
+(20, 7, 12);
+
+--
+-- Đang đổ dữ liệu cho bảng `ATTENDANCE`
+--
+INSERT INTO `ATTENDANCE` (`attendance_id`, `assignment_id`, `date`, `status`) VALUES
+(1, 1, '2025-09-05', 'present'),
+(2, 2, '2025-09-05', 'present'),
+(3, 3, '2025-09-05', 'present'),
+(4, 4, '2025-09-05', 'absent'),
+(5, 5, '2025-09-05', 'present'),
+(6, 1, '2025-09-12', 'present'),
+(7, 2, '2025-09-12', 'late'),
+(8, 3, '2025-09-12', 'present'),
+(9, 4, '2025-09-12', 'present'),
+(10, 5, '2025-09-12', 'present'),
+(11, 6, '2025-09-05', 'present'),
+(12, 7, '2025-09-05', 'present'),
+(13, 8, '2025-09-05', 'present'),
+(14, 9, '2025-09-05', 'present'),
+(15, 10, '2025-09-05', 'present'),
+(16, 1, '2025-10-25', 'absent'),
+(17, 3, '2025-10-25', 'present'),
+(18, 5, '2025-10-25', 'absent'),
+(19, 2, '2025-10-25', 'late'),
+(20, 4, '2025-10-25', 'present'),
+(21, 1, '2025-10-29', 'absent'),
+(22, 2, '2025-10-29', 'absent'),
+(23, 5, '2025-10-29', 'absent'),
+(24, 4, '2025-10-29', 'absent'),
+(25, 3, '2025-10-29', 'absent');
+
+--
+-- Đang đổ dữ liệu cho bảng `GRADES`
+--
+INSERT INTO `GRADES` (`grade_id`, `assignment_id`, `grade`, `grade_type`, `remarks`) VALUES
+(1, 1, 1, 'process', 'Cần luyện tập thêm!'),
+(2, 3, 9, 'process', 'Tốt'),
+(3, 5, 7, 'process', 'Tốt'),
+(4, 6, 9.5, 'project', 'Điểm dự án Marketing'),
+(5, 11, 8, 'process', 'Điểm BT 1 CSDL'),
+(6, 12, 7.5, 'process', 'Điểm BT 1 CSDL'),
+(7, 13, 10, 'process', 'Điểm BT 2 CSDL'),
+(8, 1, 9, 'project', 'Tốt'),
+(9, 3, 8.5, 'project', 'Tốt'),
+(10, 2, 10, 'process', 'Tốt'),
+(11, 2, 10, 'project', 'Tốt'),
+(12, 4, 1, 'process', 'Cần luyện tập thêm!'),
+(13, 4, 10, 'project', 'Tốt'),
+(14, 5, 2, 'project', 'Cần luyện tập thêm!'),
+(15, 17, 10, 'process', 'Tốt'),
+(16, 17, 10, 'project', 'Tốt'),
+(17, 18, 10, 'process', 'Tốt'),
+(18, 18, 1, 'project', 'Cần luyện tập thêm!');
+
+--
+-- Đang đổ dữ liệu cho bảng `SUBMISSIONS`
+--
+INSERT INTO `SUBMISSIONS` (`submission_id`, `submission_date`, `grade`, `feedback_text`, `task_id`, `student_id`, `submitted_file_id`, `graded_file_id`) VALUES
+(1, '2025-10-15 10:00:00', 8.5, 'Làm tốt, cần chú ý clean code.', 2, 1, 6, 11),
+(2, '2025-10-15 11:00:00', 9, 'Code chạy tốt, tối ưu.', 2, 3, 7, 12),
+(3, '2025-10-15 12:00:00', 7, 'Thuật toán chưa tối ưu.', 2, 5, 8, NULL),
+(4, '2025-10-16 14:00:00', 9.5, 'Phân tích sâu, trình bày đẹp.', 5, 2, 9, 13),
+(5, '2025-10-16 15:00:00', NULL, NULL, 5, 4, 10, NULL),
+(6, '2025-10-25 05:01:54', 10, 'Nice', 3, 1, 19, 21),
+(7, '2025-10-22 11:00:00', NULL, NULL, 3, 3, 15, NULL),
+(8, '2025-10-09 10:00:00', 8, 'Hiểu bài.', 7, 1, 6, NULL),
+(9, '2025-10-09 11:00:00', 7.5, 'Cần chi tiết hơn.', 7, 2, 7, NULL),
+(10, '2025-10-19 12:00:00', 10, 'So sánh rất chi tiết.', 8, 3, 8, NULL),
+(11, '2025-10-19 14:00:00', NULL, NULL, 8, 4, 9, NULL),
+(12, '2025-10-19 15:00:00', NULL, NULL, 8, 5, 10, NULL),
+(13, '2025-11-01 02:13:08', NULL, NULL, 21, 1, 33, NULL);
+
+
+COMMIT;

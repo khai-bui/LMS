@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - LMS</title>
+    <link rel="stylesheet"
+      href="{{ url_for('static', path='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- CSS TÙY CHỈNH CHO BỘ LỌC SELECT -->
+    <style>
+        /* Định hình chung cho tất cả các select filter */
+        #ticket-filter-status, #ticket-sort-date, .form-control {
+            /* Giúp các filter xếp hàng ngang và căn giữa */
+            vertical-align: middle; 
+            /* Định hình container */
+            padding: 8px 12px;
+            height: 40px; 
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 6px; 
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm nhẹ */
+            
+            /* Typography */
+            background-color: #ffffff;
+            color: #1f2937; /* gray-800 */
+            font-size: 14px;
+            cursor: pointer;
+            
+            /* Tắt mũi tên mặc định của trình duyệt */
+            appearance: none;
+            -webkit-appearance: none;
+            
+            /* Thay thế bằng icon Font Awesome */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M7 10l5 5 5-5H7z' fill='%236B7280'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 14px;
+            padding-right: 30px; /* Thêm padding để không che mũi tên */
+        }
+        
+        /* Hiệu ứng Focus */
+        #ticket-filter-status:focus, #ticket-sort-date:focus, .form-control:focus {
+            border-color: #4A6CF7; /* Blue chủ đạo */
+            box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.3);
+            outline: none;
+        }
+
+        /* Đảm bảo các action căn chỉnh đẹp */
+        .header-actions {
+            display: flex;
+            align-items: center; /* Căn giữa theo chiều dọc */
+            gap: 15px; /* Khoảng cách giữa các phần tử */
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div id="sidebar-placeholder">
+            {% include "partials/sidebar.html" %}
+        </div>
+
+        <main class="main-content">
+            <div id="header-placeholder">
+                {% include "partials/header.html" %}
+            </div>
+
+            <div class="content-area">
+                <section id="dashboard" class="content-section active">
+                    <h2>Bảng điều khiển tổng quan</h2>
+                    <div class="card-container">
+                        <div class="card"><i class="fas fa-user-friends"></i><h3>0</h3><p>Học viên</p></div>
+                        <div class="card"><i class="fas fa-chalkboard"></i><h3>0</h3><p>Lớp học</p></div>
+                        <div class="card"><i class="fas fa-user-tie"></i><h3>0</h3><p>Giáo viên</p></div>
+                        <div class="card"><i class="fas fa-ticket-alt"></i><h3>0</h3><p>Ticket</p></div>
+                    </div>
+                    
+                    <div class="chart-insights-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px;">
+                        <div class="card" style="padding: 20px;">
+                            <h3 style="margin-bottom: 15px; font-weight: 600;">Xu hướng Ticket 4 Tuần gần nhất</h3>
+                            <canvas id="ticket-type-chart"></canvas>
+                        </div>
+                        <div class="card" style="padding: 20px;">
+                            <h3 style="margin-bottom: 15px; font-weight: 600;">Phân bố Vai trò (Giảng viên, TC, CS)</h3>
+                            <canvas id="role-distribution-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                </section>
+
+                <section id="user-management" class="content-section">
+                    <h2>Quản lý người dùng</h2>
+                    
+                    <div class="user-management-tabs tabs" style="margin-bottom: 20px;">
+                        <button class="tab-item user-tab active" data-tab="active-users-view">Người dùng đang hoạt động</button>
+                        <button class="tab-item user-tab" data-tab="pending-users-view">Danh sách chờ duyệt</button>
+                    </div>
+
+                    <div id="active-users-view" class="tab-content active">
+                        <div class="page-header">
+                            <div class="header-actions">
+                                <input type="text" id="user-search-input" class="form-control" placeholder="Tìm kiếm theo tên hoặc email...">
+                                <button id="add-user-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm người dùng</button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Họ tên</th>
+                                        <th>Email</th>
+                                        <th>Vai trò</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="pending-users-view" class="tab-content hidden">
+                        <div class="page-header">
+                            <div class="header-actions">
+                                <input type="text" id="pending-user-search-input" class="form-control" placeholder="Tìm kiếm người dùng chờ duyệt...">
+                                <button id="batch-approve-toggle-btn" class="btn btn-warning"><i class="fas fa-list-check"></i> Duyệt hàng loạt</button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Họ tên</th>
+                                        <th>Email</th>
+                                        <th>Vai trò</th>
+                                        <th>Ngày tạo</th>
+                                        <th id="pending-action-header">Hành động</th> 
+                                    </tr>
+                                </thead>
+                                <tbody id="pending-users-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div id="batch-action-footer" class="hidden" style="text-align: right; padding-top: 15px;">
+                            <button id="cancel-batch-btn" class="btn btn-secondary" style="margin-right: 10px;">Hủy</button>
+                            <button id="confirm-batch-approve-btn" class="btn btn-primary"><i class="fas fa-check-double"></i> Duyệt (${0}) tài khoản đã chọn</button>
+                        </div>
+                    </div>
+
+                    <div id="batch-approve-confirm-modal-overlay" class="modal-overlay hidden">
+                        <div class="modal" style="max-width: 500px;">
+                            <div class="modal-header">
+                                <h3>Xác nhận duyệt tài khoản</h3>
+                                <span id="close-batch-modal-btn" class="close-modal">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bạn có chắc chắn muốn duyệt danh sách tài khoản sau đây không? Hành động này không thể hoàn tác.</p>
+                                <ul id="batch-users-list" style="padding-left: 20px; margin-top: 15px; list-style-type: disc;">
+                                    </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="cancel-batch-confirm-btn" class="btn btn-secondary">Hủy</button>
+                                <button id="final-batch-approve-btn" class="btn btn-primary">Xác nhận Duyệt</button>
+                            </div>
+                        </div>
+                    </div>                   
+                </section>
+
+                <!-- ====================== MODAL TẠO/SỬA USER ====================== -->
+
+                <div id="user-modal-overlay" class="modal-overlay hidden">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3 id="user-modal-title">Thêm người dùng mới</h3>
+                            <span id="close-user-modal-btn" class="close-modal">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <form id="user-form">
+                                <input type="hidden" id="user-id" name="id">
+                                <div class="form-group">
+                                    <label for="user-fullname">Họ và tên</label>
+                                    <input type="text" id="user-fullname" name="name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-email">Email</label>
+                                    <input type="email" id="user-email" name="email" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-role">Vai trò</label>
+                                    <select id="user-role" name="role" class="form-control">
+                                        <option value="">--Vui lòng chọn vai trò--</option>
+                                        <option value="lec">Giảng viên (LEC)</option>
+                                        <option value="tc">Tư vấn (TC)</option>
+                                        <option value="cs">Chăm sóc học viên (CS)</option>
+                                        <option value="manager">Quản lý (Manager)</option>
+                                    </select>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="user-password">Mật khẩu</label>
+                                    <input type="password" id="user-password" name="password" class="form-control" placeholder="Để trống nếu không muốn thay đổi">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="cancel-user-modal-btn" class="btn btn-secondary">Hủy</button>
+                            <button id="save-user-btn" type="submit" form="user-form" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- ====================== END MODAL TẠO/SỬA USER ====================== -->
+                
+                <!-- ====================== Quan ly Ticket ====================== -->
+                <section id="ticket-management" class="content-section">
+                    <h2>Quản lý Ticket</h2>
+                    
+                    <div class="page-header" style="margin-bottom: 20px;">
+                        <div class="header-actions">
+                            <select id="ticket-filter-status" class="form-control" style="width: 200px;">
+                                <option value="all" selected>Tất cả trạng thái</option>
+                                <option value="open">Chờ xử lý</option>
+                                <option value="in_progress">Đang xử lý</option>
+                                <option value="resolved">Đã giải quyết</option>
+                            </select>
+                            <!-- Filter Type (Nếu cần) -->
+                            <!-- <select id="ticket-filter-type" class="form-control" style="width: 200px;">...</select> -->
+                            
+                            <select id="ticket-sort-date" style="width: 200px;">
+                                <option value="newest">Mới nhất</option>
+                                <option value="oldest">Cũ nhất</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Danh sách Ticket</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại</th>
+                                    <th>Tiêu đề</th>
+                                    <!-- <th>Người gửi</th>
+                                    <th>phụ trách</th> -->
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manager-ticket-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <!-- ====================== END Quan ly Ticket ====================== -->
+
+
+                <!-- ====================== Notification  =========================== -->
+                <section id="announcements" class="content-section">
+                    <h2>Thông báo</h2>
+                    
+                    <div class="form-box card" style="margin-bottom: 30px;">
+                         <h3>Soạn thông báo mới</h3>
+                        <form id="announcement-form">
+                            <div class="form-group">
+                                <label for="announcement-title">Tiêu đề</label>
+                                <input type="text" id="announcement-title" class="form-control" required placeholder="Nhập tiêu đề thông báo...">
+                            </div>
+                            <div class="form-group">
+                                <label for="announcement-content">Nội dung</label>
+                                <textarea id="announcement-content" rows="5" class="form-control" required placeholder="Nhập nội dung chi tiết..."></textarea>
+                            </div>
+                            <div class="form-footer" style="padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                                <button id="submit-announcement-btn" type="submit" class="btn btn-primary">
+                                    Gửi thông báo
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 20px; padding: 20px;">
+                        <h3>Lịch sử Thông báo</h3>
+                        <div class="form-grid" style="grid-template-columns: 3fr 1fr; gap: 20px; margin-top: 15px;">
+                            <div class="form-group">
+                                <label for="announcement-history-search">Tìm kiếm (Tiêu đề/Nội dung):</label>
+                                <input type="text" id="announcement-history-search" class="form-control" placeholder="Tìm kiếm theo tiêu đề hoặc nội dung thông báo...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="announcement-history-sort">Sắp xếp theo Ngày:</label>
+                                <select id="announcement-history-sort" class="form-control">
+                                    <option value="newest">Mới nhất</option>
+                                    <option value="oldest">Cũ nhất</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Nội dung</th>
+                                    <th>Ngày gửi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="announcements-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <!-- ====================== END Notification ====================== -->
+
+                <!-- ====================== Report ====================== -->
+                <section id="reports" class="content-section">
+                    <div class="page-header">
+                        <h2>Báo cáo và Thống kê</h2>
+                    </div>
+                    <div class="card report-options-card">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="date-range">Khoảng thời gian</label>
+                                <select id="date-range" class="form-control">
+                                    <option value="last_7_days">7 ngày qua</option>
+                                    <option value="last_30_days">30 ngày qua</option>
+                                    <option value="this-month">Tháng này</option>
+                                    <option value="last-month">Tháng trước</option>
+                                    <option value="all-time" selected>Toàn bộ thời gian</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-footer">
+                            <button id="generate-report-btn" class="btn btn-primary">
+                                <span>Tạo báo cáo</span>
+                            </button>
+                        </div>
+                    </div>
+                
+                    <div id="report-results-container" class="hidden">
+                        <h3>Kết quả báo cáo tổng quan</h3>
+                        <div class="card-container">
+                            <div class="card">
+                                <i class="fas fa-user-plus"></i>
+                                <h3 id="report-new-students">12</h3>
+                                <p>Học viên mới</p>
+                            </div>
+                            <div class="card">
+                                <i class="fas fa-chalkboard"></i>
+                                <h3 id="report-new-classes">2</h3>
+                                <p>Lớp học mới</p>
+                            </div>
+                            <div class="card">
+                                <i class="fas fa-check-circle"></i>
+                                <h3 id="report-attendance-rate">92%</h3>
+                                <p>Tỷ lệ chuyên cần</p>
+                            </div>
+                            <div class="card">
+                                <i class="fas fa-ticket-alt"></i>
+                                <h3 id="report-resolved-tickets">28</h3>
+                                <p>Ticket đã giải quyết</p>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                                <canvas id="report-chart"></canvas>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- ====================== MODAL XEM CHI TIẾT TICKET ====================== -->
+                <div id="ticket-detail-modal-overlay" class="modal-overlay hidden">
+                    <div class="modal" style="max-width: 700px;">
+                        <div class="modal-header">
+                            <h3 id="ticket-detail-modal-title">Chi tiết Ticket #<span id="detail-ticket-id"></span></h3>
+                            <span id="close-ticket-detail-modal-btn" class="close-modal">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                             <div class="form-group">
+                                <label>Tiêu đề:</label>
+                                <p id="detail-ticket-title" class="form-control" style="background-color: #f9fafb;"></p>
+                            </div>
+                            <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="form-group">
+                                    <label>Loại Ticket:</label>
+                                    <p id="detail-ticket-type" class="form-control" style="background-color: #f9fafb;"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Trạng thái:</label>
+                                    <p id="detail-ticket-status" class="form-control" style="background-color: #f9fafb;"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Người gửi (HV):</label>
+                                    <p id="detail-ticket-sender" class="form-control" style="background-color: #f9fafb;"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>CS phụ trách:</label>
+                                    <p id="detail-ticket-cs" class="form-control" style="background-color: #f9fafb;"></p>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label>Nội dung chi tiết:</label>
+                                <textarea id="detail-ticket-description" class="form-control" rows="5" readonly style="resize: none; background-color: #f9fafb;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="manager-resolution">Phản hồi của Manager (Giải quyết):</label>
+                                <textarea id="manager-resolution" class="form-control" rows="3" placeholder="Nhập tóm tắt giải quyết vấn đề..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="resolve-ticket-btn" class="btn btn-primary"><i class="fas fa-check-circle"></i> Giải quyết Ticket</button>
+                            <button id="close-ticket-btn" class="btn btn-secondary">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- ====================== END MODAL CHI TIẾT TICKET ====================== -->
+            </div>
+        </main>
+    </div>
+
+    <div id="profile-modal-overlay" class="modal-overlay hidden">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="profile-modal-title">Thông tin Tài khoản</h3>
+                <span id="close-profile-modal-btn" class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                
+                <div id="profile-info-display">
+                    <p><strong>Tên đăng nhập:</strong> <span id="profile-username"></span></p>
+                    <p><strong>Email:</strong> <span id="profile-email"></span></p>
+                </div>
+                
+                <div id="profile-edit-form" class="hidden">
+                    <div class="form-group">
+                        <label for="edit-username">Tên đăng nhập mới:</label>
+                        <input type="text" id="edit-username" class="form-control" disabled> 
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-email">Email:</label>
+                        <input type="email" id="edit-email" class="form-control" disabled>
+                    </div>
+                    
+                    <hr style="margin: 20px 0;">
+                    
+                    <div class="form-group">
+                        <label for="new-password">Mật khẩu mới:</label>
+                        <input type="password" id="new-password" class="form-control" placeholder="Để trống nếu không muốn đổi mật khẩu">
+                    </div>
+                    <div class="form-group">
+                        <label for="current-password">Mật khẩu hiện tại (BẮT BUỘC để lưu thay đổi):</label>
+                        <input type="password" id="current-password" class="form-control" placeholder="Nhập mật khẩu hiện tại" required>
+                    </div>
+                    <p class="text-danger hidden" id="password-error" style="color: red; font-size: 0.9em;">Mật khẩu không đúng.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-profile-btn" class="btn btn-secondary">Đóng</button>
+                <!-- <button id="toggle-edit-profile-btn" class="btn btn-warning">Thay đổi thông tin</button>
+                <button id="save-profile-btn" class="btn btn-primary hidden">Lưu thay đổi</button> -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/manager.js"></script>
+</body>
+</html>
