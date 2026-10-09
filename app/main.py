@@ -62,7 +62,7 @@ app.mount(
 # HTML TEMPLATES
 # =========================
 
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="app/static/templates")
 
 
 # =========================
