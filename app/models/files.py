@@ -43,7 +43,7 @@ class TaskTypeEnum(enum.Enum):
     assignment = "assignment"
 
 class Task(Base):
-    __tablename__ = "TASKS"
+    __tablename__ = "tasks"
 
     # Cột chính
     task_id = Column(Integer, primary_key=True, index=True)
