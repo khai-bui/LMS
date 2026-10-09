@@ -11,13 +11,13 @@ class ClassStatus(enum.Enum):
     pending= "pending"
 
 class Class(Base):
-    __tablename__ = "CLASSES"
+    __tablename__ = "classes"
 
     class_id = Column(Integer, primary_key=True, autoincrement=True)
     class_name = Column(String(100), nullable=False)
-    lecturer_id = Column(Integer, ForeignKey("LECTURERS.lecturer_id", onupdate="CASCADE", ondelete="RESTRICT"), nullable=True)
+    lecturer_id = Column(Integer, ForeignKey("lecturers.lecturer_id", onupdate="CASCADE", ondelete="RESTRICT"), nullable=True)
     schedule = Column(Text, nullable=False)
-    created_by = Column(Integer, ForeignKey("USERS.user_id", onupdate="CASCADE", ondelete="RESTRICT"), nullable=False)
+    created_by = Column(Integer, ForeignKey("users.user_id", onupdate="CASCADE", ondelete="RESTRICT"), nullable=False)
     status = Column(Enum(ClassStatus), default=ClassStatus.active, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     place = Column(String(255), nullable=False)

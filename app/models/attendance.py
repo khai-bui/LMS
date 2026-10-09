@@ -9,10 +9,10 @@ class AttendanceStatus(enum.Enum):
     late = "late"
 
 class Attendance(Base):
-    __tablename__ = "ATTENDANCE"
+    __tablename__ = "attendances"
 
     attendance_id = Column(Integer, primary_key=True, autoincrement=True)
-    assignment_id = Column(Integer, ForeignKey("CLASS_ASSIGNMENTS.assignment_id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    assignment_id = Column(Integer, ForeignKey("class_assignments.assignment_id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     date = Column(Date, nullable=False)
     status = Column(Enum(AttendanceStatus), nullable=False)
 

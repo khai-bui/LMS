@@ -11,7 +11,7 @@ from app.db.database import Base
 # BẢNG 1: FILES (Bảng trung tâm lưu mọi file)
 # ----------------------------------------------------
 class File(Base):
-    __tablename__ = "FILES"
+    __tablename__ = "files"
 
     # Cột chính
     file_id = Column(Integer, primary_key=True, index=True)
@@ -22,7 +22,7 @@ class File(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Khóa ngoại: Liên kết với bảng USERS hiện có của bạn
-    uploader_user_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=False)
+    uploader_user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
 
     # --- Mối quan hệ (Relationships) ---
     
@@ -57,10 +57,10 @@ class Task(Base):
 
     # --- Khóa ngoại ---
     # Liên kết với bảng CLASSES hiện có của bạn
-    class_id = Column(Integer, ForeignKey("CLASSES.class_id"), nullable=False)
+    class_id = Column(Integer, ForeignKey("classes.class_id"), nullable=False)
     
     # Liên kết với bảng FILES (file đính kèm: slide.pdf, de_bai.pdf)
-    attached_file_id = Column(Integer, ForeignKey("FILES.file_id"), nullable=True)
+    attached_file_id = Column(Integer, ForeignKey("files.file_id"), nullable=True)
 
     # --- Mối quan hệ (Relationships) ---
     
@@ -81,7 +81,7 @@ class Task(Base):
 # BẢNG 3: SUBMISSIONS (Bài nộp của học sinh)
 # ----------------------------------------------------
 class Submission(Base):
-    __tablename__ = "SUBMISSIONS"
+    __tablename__ = "submissions"
 
     # Cột chính
     submission_id = Column(Integer, primary_key=True, index=True)
@@ -93,16 +93,16 @@ class Submission(Base):
 
     # --- Khóa ngoại ---
     # Liên kết với bảng TASKS (bài nộp này cho bài tập nào?)
-    task_id = Column(Integer, ForeignKey("TASKS.task_id"), nullable=False)
+    task_id = Column(Integer, ForeignKey("tasks.task_id"), nullable=False)
     
     # Liên kết với bảng STUDENTS hiện có của bạn (ai đã nộp?)
-    student_id = Column(Integer, ForeignKey("STUDENTS.student_id"), nullable=False)
+    student_id = Column(Integer, ForeignKey("students.student_id"), nullable=False)
     
     # Liên kết với bảng FILES (file bài làm của HS)
-    submitted_file_id = Column(Integer, ForeignKey("FILES.file_id"), nullable=False)
+    submitted_file_id = Column(Integer, ForeignKey("files.file_id"), nullable=False)
     
     # Liên kết với bảng FILES (file GV chấm và trả lại)
-    graded_file_id = Column(Integer, ForeignKey("FILES.file_id"), nullable=True, unique=True)
+    graded_file_id = Column(Integer, ForeignKey("files.file_id"), nullable=True, unique=True)
 
     # --- Mối quan hệ (Relationships) ---
 

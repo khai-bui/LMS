@@ -10,11 +10,11 @@ class TicketStatus(enum.Enum):
     resolved = "resolved"
 
 class Ticket(Base):
-    __tablename__ = "TICKETS"
+    __tablename__ = "tickets"
 
     ticket_id = Column(Integer, primary_key=True, autoincrement=True)
-    submitted_by = Column(Integer, ForeignKey("USERS.user_id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
-    assigned_to = Column(Integer, ForeignKey("USERS.user_id", onupdate="CASCADE", ondelete="SET NULL"))
+    submitted_by = Column(Integer, ForeignKey("users.user_id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    assigned_to = Column(Integer, ForeignKey("users.user_id", onupdate="CASCADE", ondelete="SET NULL"))
     issue_type = Column(String(100), nullable=False)
     title = Column(String(150), nullable=False)
     description = Column(Text, nullable=False)

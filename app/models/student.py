@@ -8,10 +8,10 @@ class StudentStatus(enum.Enum):
     inactive = "inactive"
 
 class Student(Base):
-    __tablename__ = "STUDENTS"
+    __tablename__ = "students"
 
     student_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     enrollment_date = Column(Date, nullable=False)
     status = Column(Enum(StudentStatus), default=StudentStatus.active, nullable=False)
 

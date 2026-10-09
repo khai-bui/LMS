@@ -10,13 +10,13 @@ class LecturerAttendanceStatus(str, enum.Enum):
     late = "late"
 
 class LecturersAttendance(Base):
-    __tablename__ = "LECTURERS_ATTENDANCE"
+    __tablename__ = "lecturers_attendance"
 
     lecturer_attendance_id = Column(Integer, primary_key=True, autoincrement=True)
     
     # SỬA LỖI: Phải viết hoa "LECTURERS" và "CLASSES" để khớp với __tablename__
-    lecturer_id = Column(Integer, ForeignKey("LECTURERS.lecturer_id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
-    class_id = Column(Integer, ForeignKey("CLASSES.class_id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+    lecturer_id = Column(Integer, ForeignKey("lecturers.lecturer_id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
+    class_id = Column(Integer, ForeignKey("classes.class_id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
     
     attendance_date = Column(Date, nullable=False)
     status = Column(Enum(LecturerAttendanceStatus, name='lecturer_attendance_status_enum'), nullable=False)

@@ -8,10 +8,10 @@ class GradeType(enum.Enum):
     project = "project"
 
 class Grade(Base):
-    __tablename__ = "GRADES"
+    __tablename__ = "grades"
 
     grade_id = Column(Integer, primary_key=True, autoincrement=True)
-    assignment_id = Column(Integer, ForeignKey("CLASS_ASSIGNMENTS.assignment_id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    assignment_id = Column(Integer, ForeignKey("class_assignments.assignment_id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     grade = Column(Float, nullable=False)
     grade_type = Column(Enum(GradeType), nullable=False)
     remarks = Column(Text)

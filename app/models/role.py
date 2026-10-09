@@ -4,7 +4,7 @@ from datetime import datetime
 from app.db.database import Base
 
 class Role(Base):
-    __tablename__ = "ROLES"
+    __tablename__ = "roles"
 
     role_id = Column(Integer, primary_key=True, autoincrement=True)
     role_name = Column(String(50), unique=True, nullable=False)
