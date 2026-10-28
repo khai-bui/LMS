@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 
+
 from app.api import (
     routes_auth,
     routes_notification,
@@ -22,8 +23,7 @@ from app.core.config import settings
 # =========================
 # DATABASE
 # =========================
-# database.Base.metadata.create_all(bind=database.engine)
-Base.metadata.create_all(bind=engine)
+database.Base.metadata.create_all(bind=database.engine)
 
 # =========================
 # FASTAPI
