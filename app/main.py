@@ -23,7 +23,7 @@ from app.core.config import settings
 # DATABASE
 # =========================
 # database.Base.metadata.create_all(bind=database.engine)
-
+Base.metadata.create_all(bind=engine)
 
 # =========================
 # FASTAPI
